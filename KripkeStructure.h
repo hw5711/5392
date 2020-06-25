@@ -1,10 +1,16 @@
-#ifndef KRIPKESTRUCTURE_H
-#define KRIPKESTRUCTURE
+//
+// Created by Huan wu on 6/25/20.
+//
 
-using namespace std;
+#ifndef SATPROJECT_KRIPKESTRUCTURE_H
+#define SATPROJECT_KRIPKESTRUCTURE_H
 
-class KripkeStructure {
+#include "CtlFormular.h"
+#include "State.h"
+#include "Transition.h"
 
+class KripkeStructure
+{
 };
 
-#endif
+#endif //SATPROJECT_KRIPKESTRUCTURE_H

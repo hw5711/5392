@@ -1,10 +1,16 @@
-#ifndef STATE_H
-#define STATE_H
+//
+// Created by Huan wu on 6/25/20.
+//
 
-using namespace std;
+#ifndef SATPROJECT_STATE_H
+#define SATPROJECT_STATE_H
 
-class State {
+#include "CtlFormular.h"
+#include "KripkeStructure.h"
+#include "Transition.h"
 
+class State
+{
 };
 
-#endif
+#endif //SATPROJECT_STATE_H

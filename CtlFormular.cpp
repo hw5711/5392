@@ -1,3 +1,5 @@
-#include "CtlFormular.h"
+//
+// Created by Huan wu on 6/25/20.
+//
 
-using namespace std;
+#include "CtlFormular.h"
