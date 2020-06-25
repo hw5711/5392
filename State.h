@@ -5,9 +5,9 @@
 #ifndef SATPROJECT_STATE_H
 #define SATPROJECT_STATE_H
 
-#include "CtlFormula.h"
-#include "KripkeStructure.h"
-#include "Transition.h"
+//#include "CtlFormula.h"
+//#include "KripkeStructure.h"
+//#include "Transition.h"
 
 #include <list>
 #include <string>
@@ -22,17 +22,17 @@ public:
 
     State()
     {
-        this.Atom = new list<string>;
+        //this.Atom = new list<string>;
     }
 
     State(string stateName)
     {
-        this.StateName = stateName;
+        this->StateName = stateName;
     }
 
     bool Equals(State other)
     {
-        return this.StateName.Equals(other.StateName);
+        return this->StateName == other.StateName;
     }
 };
 
