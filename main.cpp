@@ -1,4 +1,4 @@
-#include "CtlFormular.h"
+#include "CtlFormula.h"
 #include "KripkeStructure.h"
 #include "State.h"
 #include "Transition.h"
@@ -9,21 +9,36 @@
 
 using namespace std;
 
+//Need to update
+string GetMessage(bool isSatisfy, string expression, string stateID)
+{
+    string message = "xx";
+    /*** need to check ***/
+    //              string.Format("Property {0} {1} in state {2}"
+    //            , expression
+    //            , isSatisfy ? "holds" : "does not hold"
+    //            , stateID);
+
+    return message;
+}
+
 int main()
 {
+
+    KripkeStructure _kripke;
     //get model file
     cout << "Enter file name (kripke model): " << endl;
-    ifstream _kripke;
+    ifstream _kripke_file;
     string input_kripke_file_name, input_kripke_model;
     cin >> input_kripke_file_name;
     string kripke_content;
-    _kripke.open(input_kripke_file_name);
+    _kripke_file.open(input_kripke_file_name);
 
-    if (_kripke.is_open())
+    if (_kripke_file.is_open())
     {
-        while (!_kripke.eof())
+        while (!_kripke_file.eof())
         {
-            _kripke >> kripke_content;
+            _kripke_file >> kripke_content;
             input_kripke_model += kripke_content;
             //cout << kripke_content;
         }
@@ -32,7 +47,7 @@ int main()
     {
         cout << "File can't open ";
     }
-    _kripke.close();
+    _kripke_file.close();
 
     //get state
     string input_state;
@@ -40,14 +55,20 @@ int main()
     cin >> input_state;
 
     //get CTL formular
-    string input_ctl_formular;
-    cout << "Enter CTL formular: " << endl;
-    cin >> input_ctl_formular;
+    string input_ctl_formula;
+    cout << "Enter CTL formula: " << endl;
+    cin >> input_ctl_formula;
 
     //for testing part
     cout << "File (Kripke model): " << input_kripke_model << endl;
     cout << "State: " << input_state << endl;
-    cout << "CTL formular: " << input_ctl_formular;
+    cout << "CTL formula: " << input_ctl_formula;
+
+    State checkedState = State(input_state);
+    CtlFormula ctlFormula = CtlFormula(input_kripke_model, checkedState, _kripke);
+    bool isSatisfy = ctlFormula.IsSatisfy();
+    string message = GetMessage(isSatisfy, input_ctl_formula, input_state);
+    cout << "Result is: " << message << endl;
 
     return 0;
 }
