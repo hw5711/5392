@@ -1,4 +1,10 @@
-Test
-Test
+#ifndef STATE_H
+#define STATE_H
 
-6666
+using namespace std;
+
+class State {
+
+};
+
+#endif

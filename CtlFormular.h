@@ -1,4 +1,10 @@
-Test
-Test
+#ifndef CTLFORMULAR_H
+#define CTLFORMULAR_H
 
-6666
+using namespace std;
+
+class CtlFormular {
+
+};
+
+#endif

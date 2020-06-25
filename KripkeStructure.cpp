@@ -1,4 +1,3 @@
-Test
-Test
+#include "KripkeStructure.h"
 
-6666
+using namespace std;

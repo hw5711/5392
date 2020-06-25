@@ -1,4 +1,10 @@
-Test
-Test
+#ifndef TRANSITION_H
+#define TRANSITION_H
 
-6666
+using namespace std;
+
+class Transition {
+
+};
+
+#endif

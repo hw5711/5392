@@ -1,4 +1,3 @@
-Test
-Test
+#include "CtlFormular.h"
 
-6666
+using namespace std;
