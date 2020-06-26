@@ -403,7 +403,7 @@ private:
 
             for (State state : preAStates)
             {
-                if ( newY.find(state) == newY.length())
+                if ( newY.find(state) == newY.size())
                     newY.push_back(state);
             }
 
