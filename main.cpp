@@ -70,7 +70,7 @@ int main()
     //    }
 
     //for testing part
-    cout << "File (Kripke model): " << input_kripke_model << endl;
+    cout << "\nFile (Kripke model): " << input_kripke_model << endl;
     cout << "State: " << input_state << endl;
     cout << "CTL formula: " << input_ctl_formula;
 
