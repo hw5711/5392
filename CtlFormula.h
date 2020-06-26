@@ -523,10 +523,10 @@ private:
     // Removing extra brackets
     string RemoveExtraBrackets(string expression)
     {
-        string newExpression = expression;
-        int openParanthesis = 0;
-        int closeParanthesis = 0;
-		int len = expression.length();
+	string newExpression = expression;
+	int openParanthesis = 0;
+	int closeParanthesis = 0;
+	int len = expression.length();
 		
         if (expression[0] == '(' && expression[len-1] == ')')
         {
@@ -541,7 +541,7 @@ private:
             }
 
             if (openParanthesis - 1 == closeParanthesis)
-                newExpression = expression.substr(1, expression.Length - 2);
+                newExpression = expression.substr(1, len - 2);
         }
         return newExpression;
     }
