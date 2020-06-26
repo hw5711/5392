@@ -16,7 +16,6 @@ using namespace std;
 
 class KripkeStructure
 {
-
 public:
     list<Transition> Transitions; // not add getter and setter
     list<State> States;           // not add getter and setter
@@ -24,12 +23,12 @@ public:
 
     KripkeStructure()
     {
-        Transitions = new list<Transition>();
-        States = new list<State>();
-        Atoms = new list<string>();
+        Transitions = list<Transition>();
+        States = list<State>();
+        Atoms = list<string>();
     }
 
-    KripkeStructure(string kripkeStructureDefinition)
+    KripkeStructure(string kripkeStructureDefinition) : KripkeStructure()
     {
 
         list<string> parsedStructure = kripkeStructureDefinition
@@ -38,8 +37,8 @@ public:
                                            .ToList();
 
         if (parsedStructure == null || parsedStructure.Count != 4)
-            throw new FormatException("Input file does not contain appropriate segments to construct kripke structure");
-
+            //throw new FormatException("Input file does not contain appropriate segments to construct kripke structure");
+            cout << "Input file does not contain appropriate segments to construct kripke structure." << endl;
         list<string> stateNames = parsedStructure[0]
                                       .Replace(" ", string.Empty)
                                       .Split(new char[]{','})
@@ -141,7 +140,7 @@ public:
         return null;
     }
 
-    override string ToString()
+    string ToString()
     {
         StringBuilder sb = new StringBuilder();
 
