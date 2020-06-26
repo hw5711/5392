@@ -38,7 +38,7 @@ public:
 
     bool Equals(Transition other)
     {
-        if (FromState.Equals(other.FromState) && this.ToState.Equals(other.ToState))
+        if (FromState.Equals(other.FromState) && ToState.Equals(other.ToState))
             return true;
 
         return false;

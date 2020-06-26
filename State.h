@@ -22,10 +22,10 @@ public:
 
     State()
     {
-        //this.Atom = new list<string>;
+        Atom = list<string>();
     }
 
-    State(string stateName)
+    State(string stateName) : State()
     {
         StateName = stateName;
     }
