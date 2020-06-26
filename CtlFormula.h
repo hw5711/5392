@@ -487,29 +487,31 @@ private:
     }
 
     // Determine whether given expression contains binary operation for the next checking
-    bool IsBinaryOp(string expression, string symbol, ref string leftExpression, ref string rightExpression)
+    bool IsBinaryOp(string expression, string sym, string &leftExpression, string &rightExpression)
     {
         bool isBinaryOp = false;
-        if (expression.Contains(symbol))
+        int len = expression.length();
+        char symbol = sym[0];
+        if (expression.find(symbol) != string::npos)
         {
             int openParanthesisCount = 0;
             int closeParanthesisCount = 0;
 
-            for (int i = 0; i < expression.Length; i++)
+            for (int i = 0; i < len; i++)
             {
-                string currentChar = expression.Substring(i, 1);
-                if (currentChar.Equals(symbol) && openParanthesisCount == closeParanthesisCount)
+                char currentChar = expression[i];
+                if (currentChar == symbol && openParanthesisCount == closeParanthesisCount)
                 {
-                    leftExpression = expression.Substring(0, i);
-                    rightExpression = expression.Substring(i + 1, expression.Length - i - 1);
+                    leftExpression = expression.substr(0, i);
+                    rightExpression = expression.substr(i + 1, len - i - 1);
                     isBinaryOp = true;
                     break;
                 }
-                else if (currentChar.Equals("("))
+                else if ( currentChar == '(')
                 {
                     openParanthesisCount++;
                 }
-                else if (currentChar.Equals(")"))
+                else if (currentChar == ')')
                 {
                     closeParanthesisCount++;
                 }
@@ -524,21 +526,22 @@ private:
         string newExpression = expression;
         int openParanthesis = 0;
         int closeParanthesis = 0;
-
-        if (expression.StartsWith("(") && expression.EndsWith(")"))
+		int len = expression.length();
+		
+        if (expression[0] == '(' && expression[len-1] == ')')
         {
-            for (int i = 0; i < expression.Length - 1; i++)
+            for (int i = 0; i < len - 1; i++)
             {
-                string charExpression = expression.Substring(i, 1);
+                char charExpression = expression[i];
 
-                if (charExpression.Equals("("))
+                if (charExpression == '(')
                     openParanthesis++;
-                else if (charExpression.Equals(")"))
+                else if (charExpression == ')')
                     closeParanthesis++;
             }
 
             if (openParanthesis - 1 == closeParanthesis)
-                newExpression = expression.Substring(1, expression.Length - 2);
+                newExpression = expression.substr(1, expression.Length - 2);
         }
         return newExpression;
     }
