@@ -170,7 +170,7 @@ private:
     list<State> SAT(string expression)
     {
         System.Diagnostics.Debug.WriteLine(string.Format("Original Expression: {0}", expression));
-        list<State> states = new list<State>();
+        list<State> states;// = new list<State>();
 
         //from Logic in Computer Science, page 227
         string leftExpression = string.Empty, rightExpression = string.Empty;
