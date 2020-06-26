@@ -1,6 +1,6 @@
 //
 // Created by Huan wu on 6/25/20.
-//test!!!!
+
 
 #ifndef SATPROJECT_KRIPKESTRUCTURE_H
 #define SATPROJECT_KRIPKESTRUCTURE_H
@@ -52,7 +52,8 @@ public:
                                                .ToList();
 
         //load states
-        foreach (string stateName in stateNames)
+        //foreach (string stateName in stateNames)
+        for (auto stateName : stateNames)
         {
             State state = new State(stateName);
             if (!States.Contains(state))
@@ -62,7 +63,7 @@ public:
         }
 
         //load transitions
-        foreach (string transition in transitions)
+        for (string transition : transitions)
         {
             list<string> parsedTransition = transition.Split(new char[]{':'}).ToList();
 
@@ -93,7 +94,7 @@ public:
         }
 
         //load atoms
-        foreach (string stateAtomStructure in stateAtomStructures)
+        for (string stateAtomStructure : stateAtomStructures)
         {
             list<string> parsedStateAtomStructure = stateAtomStructure.Split(new char[]{':'}).ToList();
 
@@ -104,7 +105,7 @@ public:
             list<string> parsedAtoms = atomNames.Split(new char[]{' '}).ToList();
 
             list<string> stateAtoms = new list<string>();
-            foreach (string atom in parsedAtoms)
+            for (string atom : parsedAtoms)
             {
                 if (string.IsNullOrEmpty(atom))
                 {
@@ -121,7 +122,7 @@ public:
             stateObj.Atoms = stateAtoms;
 
             //load to list of atoms
-            foreach (string atom in stateAtoms)
+            for (string atom : stateAtoms)
             {
                 if (!Atoms.Contains(atom))
                     Atoms.Add(atom);
@@ -131,7 +132,7 @@ public:
 
     State FindStateByName(string stateName)
     {
-        foreach (State state in States)
+        for (State state : States)
         {
             if (state.StateName.Equals(stateName))
                 return state;
@@ -161,7 +162,7 @@ public:
         StringBuilder sb = new StringBuilder();
 
         list<string> stateStrings = new list<string>();
-        foreach (State state in States)
+        for (State state : States)
         {
             string atomNames = string.Join(", ", state.Atoms.ToArray());
             stateStrings.Add(string.Format("{0}({1})", state.StateName, atomNames));
@@ -176,7 +177,7 @@ public:
         StringBuilder sb = new StringBuilder();
 
         list<string> transitionString = new list<string>();
-        foreach (Transition transition in Transitions)
+        for (Transition transition : Transitions)
         {
             transitionString.Add(string.Format("{0}({1} -> {2})", transition.TransitionName, transition.FromState.StateName, transition.ToState.StateName));
         }
