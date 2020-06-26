@@ -440,25 +440,28 @@ private:
     // PreA
     list<State> PreA(list<State> y)
     {
-        //pre∀(Y ) = pre∃y − pre∃(S − Y)
+        //preâˆ€(Y ) = preâˆƒy âˆ’ preâˆƒ(S âˆ’ Y)
         list<State> PreEY = PreE(y);
 
-        list<State> S_Minus_Y = new list<State>();
-        S_Minus_Y.AddRange(_kripke.States.ToArray());
+        list<State> S_Minus_Y;// = new list<State>();
+        for( State x : _kripke.States)
+			S_Minus_Y.push_back(x);
 
-        foreach (State state in y)
+        for (State state : y)
         {
-            if (S_Minus_Y.Contains(state))
-                S_Minus_Y.Remove(state);
+        	for( State x : S_Minus_Y)
+            	if ( x.find(state))
+                	S_Minus_Y.Remove(x);
         }
 
         list<State> PreE_S_Minus_Y = PreE(S_Minus_Y);
 
         //PreEY - PreE(S-Y)
-        foreach (State state in PreE_S_Minus_Y)
+        for (State state : PreE_S_Minus_Y)
         {
-            if (PreEY.Contains(state))
-                PreEY.Remove(state);
+        	for( State x in PreEY)
+	            if ( x.find(state))
+    	            PreEY.remove(x);
         }
 
         return PreEY;
