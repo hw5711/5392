@@ -1,16 +1,15 @@
 //
 // Created by Huan wu on 6/25/20.
 
-
 #ifndef SATPROJECT_KRIPKESTRUCTURE_H
 #define SATPROJECT_KRIPKESTRUCTURE_H
 
-#include "CtlFormula.h"
 #include "State.h"
 #include "Transition.h"
 
 #include <list>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -55,9 +54,12 @@ public:
         //foreach (string stateName in stateNames)
         for (auto stateName : stateNames)
         {
-            State state = new State(stateName);
-            if (!States.Contains(state))
-                States.Add(new State(stateName));
+            //State state = new State(stateName);
+            State state;
+            //if (!States.Contains(state)) 
+            if(std::find(std::begin(States), std::end(my_list), state) == std::end(state))
+                //States.Add(new State(stateName));
+                States.push_back(State(stateName));
             else
                 throw new FormatException(string.Format("State {0} is defined more than once", stateName));
         }
@@ -159,13 +161,13 @@ public:
 
     string StatesToString()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb; // = new StringBuilder();
 
-        list<string> stateStrings = new list<string>();
+        list<string> stateStrings; // = new list<string>();
         for (State state : States)
         {
             string atomNames = string.Join(", ", state.Atoms.ToArray());
-            stateStrings.Add(string.Format("{0}({1})", state.StateName, atomNames));
+            stateStrings.push_back(string.Format("{0}({1})", state.StateName, atomNames));
         }
 
         sb.Append(string.Join(", ", stateStrings.ToArray()));
@@ -176,10 +178,10 @@ public:
     {
         StringBuilder sb = new StringBuilder();
 
-        list<string> transitionString = new list<string>();
+        list<string> transitionString; // = new list<string>();
         for (Transition transition : Transitions)
         {
-            transitionString.Add(string.Format("{0}({1} -> {2})", transition.TransitionName, transition.FromState.StateName, transition.ToState.StateName));
+            transitionString.push_back(string.Format("{0}({1} -> {2})", transition.TransitionName, transition.FromState.StateName, transition.ToState.StateName));
         }
 
         sb.Append(string.Join(", ", transitionString.ToArray()));
