@@ -27,12 +27,12 @@ public:
 
     State(string stateName)
     {
-        this->StateName = stateName;
+        StateName = stateName;
     }
 
     bool Equals(State other)
     {
-        return this->StateName == other.StateName;
+        return StateName == other.StateName;
     }
 };
 
