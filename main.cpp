@@ -25,7 +25,7 @@ string GetMessage(bool isSatisfy, string expression, string stateID)
 int main()
 {
 
-    KripkeStructure _kripke;
+    //KripkeStructure _kripke;
     //get model file
     cout << "Enter file name (kripke model): " << endl;
     ifstream _kripke_file;
@@ -65,7 +65,7 @@ int main()
     cout << "CTL formula: " << input_ctl_formula;
 
     State checkedState = State(input_state);
-    CtlFormula ctlFormula = CtlFormula(input_kripke_model, checkedState, _kripke);
+    CtlFormula ctlFormula = CtlFormula(input_ctl_formula, checkedState, input_kripke_model);
     bool isSatisfy = ctlFormula.IsSatisfy();
     string message = GetMessage(isSatisfy, input_ctl_formula, input_state);
     cout << "Result is: " << message << endl;
