@@ -37,7 +37,7 @@ enum TypeSAT
 class CtlFormula
 {
 public:
-    KripkeStructure _kripke
+    KripkeStructure _kripke;
     State _state;
     string _expression;
     Dictionary<string, string> _convertionString;
