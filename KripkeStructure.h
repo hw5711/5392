@@ -76,10 +76,11 @@ public:
         {
             //State state = new State(stateName);
             State state = State(stateName);
-                          //if (!States.Contains(state))
-                          if (std::find(std::begin(States), std::end(States), state) == std::end(States))
-                          //States.Add(new State(stateName));
-                          States.push_back(State(stateName));
+            //if (!States.Contains(state))
+            //            if (std::find(std::begin(States), std::end(States), state) == std::end(States))
+            if (find(begin(States), end(States), state) == end(States))
+                //States.Add(new State(stateName));
+                States.push_back(State(stateName));
             else
                 cout << "State {0} is defined more than once " << stateName;
         }
