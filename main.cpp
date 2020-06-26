@@ -58,6 +58,11 @@ int main()
     cout << "Enter CTL formula: " << endl;
     cin >> input_ctl_formula;
 
+    //for testing part
+    cout << "\nFile (Kripke model): " << input_kripke_model << endl;
+    cout << "State: " << input_state << endl;
+    cout << "CTL formula: " << input_ctl_formula << endl;
+
     //parse input kripke model to Objest KripkeStructure
     KripkeStructure _kripke;
     KripkeStructure kripke(input_kripke_model);
@@ -68,11 +73,6 @@ int main()
     //    for(iter = _kripke.States.begin(); iter != _kripke.States.end(); iter++){
     //        cout << *iter << endl;
     //    }
-
-    //for testing part
-    cout << "\nFile (Kripke model): " << input_kripke_model << endl;
-    cout << "State: " << input_state << endl;
-    cout << "CTL formula: " << input_ctl_formula;
 
     State checkedState = State(input_state);
     CtlFormula ctlFormula = CtlFormula(input_ctl_formula, checkedState, kripke_model);
