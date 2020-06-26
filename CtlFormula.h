@@ -11,6 +11,7 @@
 
 #include <string>
 #include <list>
+#include <map>
 
 using namespace std;
 
@@ -40,16 +41,23 @@ public:
     KripkeStructure _kripke;
     State _state;
     string _expression;
-    Dictionary<string, string> _convertionString;
+	// modify
+    map<string, string> _convertionString;
 
     //constrctor
     CtlFormula(string expression, State state, KripkeStructure kripke)
     {
-        _convertionString = new Dictionary<string, string>();
-        _convertionString.Add("and", "&");
-        _convertionString.Add("or", "|");
-        _convertionString.Add("->", ">");
-        _convertionString.Add("not", "!");
+//         _convertionString = new Dictionary<string, string>();
+//         _convertionString.Add("and", "&");
+//         _convertionString.Add("or", "|");
+//         _convertionString.Add("->", ">");
+//         _convertionString.Add("not", "!");
+
+		// modify: consert dictionary to map
+		_convertionString["and"] = "&";
+		_convertionString["or"] = "|";
+		_convertionString["->"] = ">";
+		_convertionString["not"] = "!";
 
         _kripke = kripke;
         _state = state;
@@ -57,10 +65,21 @@ public:
     }
     string ConvertToSystemFormula(string expression)
     {
-        foreach (KeyValuePair<string, string> entry in _convertionString)
-        {
-            expression = expression.Replace(entry.Key.ToString(), entry.Value.ToString());
-        }
+//         foreach (KeyValuePair<string, string> entry in _convertionString)
+//         {
+//             expression = expression.Replace(entry.Key.ToString(), entry.Value.ToString());
+//         }
+
+		// modify
+		for (auto entry : _convertionString)
+		{
+			size_t pos = expression.find(entry.first);
+			while (pos != string::npos)
+			{
+				expression.replace(pos, entry.first.length(), entry.second);
+				pos = expression.find(entry.first, pos + entry.first.length() + 1);
+			}
+		}
 
         return expression;
     }
@@ -170,7 +189,7 @@ private:
     list<State> SAT(string expression)
     {
         System.Diagnostics.Debug.WriteLine(string.Format("Original Expression: {0}", expression));
-        list<State> states;// = new list<State>();
+        list<State> states = new list<State>();
 
         //from Logic in Computer Science, page 227
         string leftExpression = string.Empty, rightExpression = string.Empty;
@@ -193,9 +212,7 @@ private:
             //empty
             break;
         case Atomic:
-            //foreach (State state in _kripke.States)
-            list<States>::iterator iter;
-            for(iter = _kripke.States.begin();iter != _kripke.States.end(); iter++)
+            foreach (State state in _kripke.States)
             {
                 if (state.Atoms.Contains(leftExpression))
                     states.Add(state);
