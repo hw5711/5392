@@ -86,57 +86,64 @@ public:
     bool IsSatisfy()
     {
         list<State> states = SAT(_expression);
-        if (states.Contains(_state))
-            return true;
+//         if (states.Contains(_state))
+//             return true;
+
+		for (auto& t : states)
+		{
+			if (t.Equals(_state))
+				return true;
+		}
+
         return false;
     }
 
 private:
-    TypeSAT GetTypeSAT(string expression, ref string leftExpression, ref string rightExpression)
+    TypeSAT GetTypeSAT(string expression, string& leftExpression, string& rightExpression)
     {
         //remove extra brackets
         expression = RemoveExtraBrackets(expression);
 
         //look for binary implies
-        if (expression.Contains(">"))
+        if (expression.find(">") != string::npos)
         {
-            if (IsBinaryOp(expression, ">", ref leftExpression, ref rightExpression))
+            if (IsBinaryOp(expression, ">", leftExpression, rightExpression))
                 return Implies;
         }
         //look for binary and
-        if (expression.Contains("&"))
+        if (expression.find("&") != string::npos)
         {
-            if (IsBinaryOp(expression, "&", ref leftExpression, ref rightExpression))
+            if (IsBinaryOp(expression, "&", leftExpression, rightExpression))
                 return And;
         }
         //look for binary or
-        if (expression.Contains("|"))
+        if (expression.find("|") != string::npos)
         {
-            if (IsBinaryOp(expression, "|", ref leftExpression, ref rightExpression))
+            if (IsBinaryOp(expression, "|", leftExpression, rightExpression))
                 return Or;
         }
         //look for binary AU
-        if (expression.StartsWith("A("))
+        if (expression.compare(0, 2, "A(") == 0)
         {
-            string strippedExpression = expression.Substring(2, expression.Length - 3);
-            if (IsBinaryOp(strippedExpression, "U", ref leftExpression, ref rightExpression))
+            string strippedExpression = expression.substr(2, expression.length() - 3);
+            if (IsBinaryOp(strippedExpression, "U", leftExpression, rightExpression))
                 return AU;
         }
         //look for binary EU
-        if (expression.StartsWith("E("))
+        if (expression.compare(0, 2, "E(") == 0)
         {
-            string strippedExpression = expression.Substring(2, expression.Length - 3);
-            if (IsBinaryOp(strippedExpression, "U", ref leftExpression, ref rightExpression))
+            string strippedExpression = expression.substr(2, expression.length() - 3);
+            if (IsBinaryOp(strippedExpression, "U", leftExpression, rightExpression))
                 return EU;
         }
 
         //look for unary T, F, !, AX, EX, AG, EG, AF, EF, atomic
-        if (expression.Equals("T"))
+        if (expression.compare("T") == 0)
         {
             leftExpression = expression;
             return AllTrue;
         }
-        if (expression.Equals("F"))
+        if (expression.compare("F") == 0)
         {
             leftExpression = expression;
             return AllFalse;
@@ -146,39 +153,39 @@ private:
             leftExpression = expression;
             return Atomic;
         }
-        if (expression.StartsWith("!"))
+        if (expression.front() == '!')
         {
-            leftExpression = expression.Substring(1, expression.Length - 1);
+            leftExpression = expression.substr(1, expression.length() - 1);
             return Not;
         }
-        if (expression.StartsWith("AX"))
+        if (expression.compare(0, 2, "AX"))
         {
-            leftExpression = expression.Substring(2, expression.Length - 2);
+            leftExpression = expression.substr(2, expression.length() - 2);
             return AX;
         }
-        if (expression.StartsWith("EX"))
+        if (expression.compare(0, 2, "EX"))
         {
-            leftExpression = expression.Substring(2, expression.Length - 2);
+            leftExpression = expression.substr(2, expression.length() - 2);
             return EX;
         }
-        if (expression.StartsWith("EF"))
+        if (expression.compare(0, 2, "EF"))
         {
-            leftExpression = expression.Substring(2, expression.Length - 2);
+            leftExpression = expression.substr(2, expression.length() - 2);
             return EF;
         }
-        if (expression.StartsWith("EG"))
+        if (expression.compare(0, 2, "EG"))
         {
-            leftExpression = expression.Substring(2, expression.Length - 2);
+            leftExpression = expression.substr(2, expression.length() - 2);
             return EG;
         }
-        if (expression.StartsWith("AF"))
+        if (expression.compare(0, 2, "AF"))
         {
-            leftExpression = expression.Substring(2, expression.Length - 2);
+            leftExpression = expression.substr(2, expression.length() - 2);
             return AF;
         }
-        if (expression.StartsWith("AG"))
+        if (expression.compare(0, 2, "AG"))
         {
-            leftExpression = expression.Substring(2, expression.Length - 2);
+            leftExpression = expression.substr(2, expression.length() - 2);
             return AG;
         }
 
@@ -188,45 +195,59 @@ private:
     // Determine states that satisfy given expression
     list<State> SAT(string expression)
     {
-        System.Diagnostics.Debug.WriteLine(string.Format("Original Expression: {0}", expression));
-        list<State> states = new list<State>();
+//        System.Diagnostics.Debug.WriteLine(string.Format("Original Expression: {0}", expression));
+		std::cout << "Original Expression: " << expression << std::endl;
+		list<State> states;
 
         //from Logic in Computer Science, page 227
-        string leftExpression = string.Empty, rightExpression = string.Empty;
+        string leftExpression = "", rightExpression = "";
 
         //TypeSAT typeSAT = DetermineTypeSAT(expression, ref leftExpression, ref rightExpression);
-        TypeSAT typeSAT = GetTypeSAT(expression, ref leftExpression, ref rightExpression);
+        TypeSAT typeSAT = GetTypeSAT(expression, leftExpression, rightExpression);
 
-        System.Diagnostics.Debug.WriteLine(string.Format("Type SAT: {0}", ToString()));
-        System.Diagnostics.Debug.WriteLine(string.Format("Left Expression: {0}", leftExpression));
-        System.Diagnostics.Debug.WriteLine(string.Format("Right Expression: {0}", rightExpression));
-        System.Diagnostics.Debug.WriteLine("------------------------------------");
+//         System.Diagnostics.Debug.WriteLine(string.Format("Type SAT: {0}", ToString()));
+//         System.Diagnostics.Debug.WriteLine(string.Format("Left Expression: {0}", leftExpression));
+//         System.Diagnostics.Debug.WriteLine(string.Format("Right Expression: {0}", rightExpression));
+//         System.Diagnostics.Debug.WriteLine("------------------------------------");
+
+		std::cout << "Type SAT: " << std::endl;
+		std::cout << "Left Expression: " << leftExpression << std::endl;
+		std::cout << "Right Expression: " << rightExpression << std::endl;
+		std::cout << "------------------------------------" << std::endl;
 
         switch (typeSAT)
         {
         case AllTrue:
             //all states
-            states.AddRange(_kripke.States.ToArray());
+			for (State st : _kripke.States)
+				states.push_back(st);
             break;
         case AllFalse:
             //empty
             break;
         case Atomic:
-            foreach (State state in _kripke.States)
-            {
-                if (state.Atoms.Contains(leftExpression))
-                    states.Add(state);
-            }
+			for (State state : _kripke.States)
+			{
+				for (string s : state.Atom)
+				{
+					if (s == leftExpression)
+						states.push_back(state);
+				}
+			}
             break;
         case Not:
             //S − SAT (φ1)
-            states.AddRange(_kripke.States.ToArray());
+			for (State st : _kripke.States)
+				states.push_back(st);
             list<State> f1States = SAT(leftExpression);
 
-            foreach (State state in f1States)
+            for (State state : f1States)
             {
-                if (states.Contains(state))
-                    states.Remove(state);
+				for (State st : states)
+				{
+					if (st.Equals(state))
+						states.remove(st);
+				}
             }
             break;
         case And:
@@ -234,10 +255,13 @@ private:
             list<State> andF1States = SAT(leftExpression);
             list<State> andF2States = SAT(rightExpression);
 
-            foreach (State state in andF1States)
+            for (State state : andF1States)
             {
-                if (andF2States.Contains(state))
-                    states.Add(state);
+				for (State st : andF2States)
+				{
+					if (st.Equals(state))
+						states.push_back(state);
+				}
             }
             break;
         case Or:
@@ -246,33 +270,43 @@ private:
             list<State> orF2States = SAT(rightExpression);
 
             states = orF1States;
-            foreach (State state in orF2States)
+            for (State state : orF2States)
             {
-                if (!states.Contains(state))
-                    states.Add(state);
+				bool flag = false;
+				for (State st : states)
+				{
+					if (st.Equals(state))
+					{
+						flag = true;
+						break;
+					}
+				}
+				if (!flag) states.push_back(state);
             }
             break;
         case Implies:
             //SAT (¬φ1 ∨ φ2)
             //TODO: reevaluate impliesFormula
-            string impliesFormula = string.Concat("!", leftExpression, "|", rightExpression);
+            // string impliesFormula = string.Concat("!", leftExpression, "|", rightExpression);
+			string impliesFormula = "!" + leftExpression + "|" + rightExpression;
             states = SAT(impliesFormula);
             break;
         case AX:
             //SAT (¬EX¬φ1)
             //TODO: reevaluate axFormula
-            string axFormula = string.Concat("!", "EX", "!", leftExpression);
-            states = SAT(axFormula);
+            // string axFormula = string.Concat("!", "EX", "!", leftExpression);
+			string axFormula = "!" + "EX" + "!" + leftExpression;
+			states = SAT(axFormula);
 
             //check if states actually has link to next state
-            list<State> tempStates = new list<State>();
-            foreach (State sourceState in states)
+            list<State> tempStates;
+            for (State sourceState : states)
             {
-                foreach (Transition transition in _kripke.Transitions)
+                for (Transition transition : _kripke.Transitions)
                 {
                     if (sourceState.Equals(transition.FromState))
                     {
-                        tempStates.Add(sourceState);
+                        tempStates.push_back(sourceState);
                         break;
                     }
                 }
@@ -289,17 +323,28 @@ private:
             //A[φ1 U φ2]
             //SAT(¬(E[¬φ2 U (¬φ1 ∧¬φ2)] ∨ EG¬φ2))
             //TODO: reevaluate auFormulaBuilder
-            StringBuilder auFormulaBuilder = new StringBuilder();
-            auFormulaBuilder.Append("!(E(!");
-            auFormulaBuilder.Append(rightExpression);
-            auFormulaBuilder.Append("U(!");
-            auFormulaBuilder.Append(leftExpression);
-            auFormulaBuilder.Append("&!");
-            auFormulaBuilder.Append(rightExpression);
-            auFormulaBuilder.Append("))|(EG!");
-            auFormulaBuilder.Append(rightExpression);
-            auFormulaBuilder.Append("))");
-            states = SAT(auFormulaBuilder.ToString());
+//             StringBuilder auFormulaBuilder = new StringBuilder();
+//             auFormulaBuilder.Append("!(E(!");
+//             auFormulaBuilder.Append(rightExpression);
+//             auFormulaBuilder.Append("U(!");
+//             auFormulaBuilder.Append(leftExpression);
+//             auFormulaBuilder.Append("&!");
+//             auFormulaBuilder.Append(rightExpression);
+//             auFormulaBuilder.Append("))|(EG!");
+//             auFormulaBuilder.Append(rightExpression);
+//             auFormulaBuilder.Append("))");
+//             states = SAT(auFormulaBuilder.ToString());
+			string auFormulaBuilder;
+			auFormulaBuilder.append("!(E(!");
+			auFormulaBuilder.append(rightExpression);
+			auFormulaBuilder.append("U(!");
+			auFormulaBuilder.append(leftExpression);
+			auFormulaBuilder.append("&!");
+			auFormulaBuilder.append(rightExpression);
+			auFormulaBuilder.append("))|(EG!");
+			auFormulaBuilder.append(rightExpression);
+			auFormulaBuilder.append("))");
+			states = SAT(auFormulaBuilder);
             break;
         case EU:
             //SATEU(φ1, φ2)
@@ -309,13 +354,15 @@ private:
         case EF:
             //SAT (E( U φ1))
             //TODO: reevaluate efFormula
-            string efFormula = string.Concat("E(TU", leftExpression, ")");
+            // string efFormula = string.Concat("E(TU", leftExpression, ")");
+			string efFormula = "E(TU" + leftExpression + ")";
             states = SAT(efFormula);
             break;
         case EG:
             //SAT(¬AF¬φ1)
             //TODO: reevaulate egFormula
-            string egFormula = string.Concat("!AF!", leftExpression);
+            // string egFormula = string.Concat("!AF!", leftExpression);
+			string egFormula = "!AF!" + leftExpression;
             states = SAT(egFormula);
             break;
         case AF:
@@ -327,11 +374,13 @@ private:
         case AG:
             //SAT (¬EF¬φ1)
             //TODO: reevaluate agFormula
-            string agFormula = string.Concat("!EF!", leftExpression);
-            states = SAT(agFormula);
+            // string agFormula = string.Concat("!EF!", leftExpression);
+			string agFormula = "!EF!" + leftExpression;
+			states = SAT(agFormula);
             break;
         case Unknown:
-            throw new FormatException("Invalid CTL expression");
+            // throw new FormatException("Invalid CTL expression");
+			std::cout << "Invalid CTL expression" << std::endl;
         }
 
         return states;
@@ -343,8 +392,8 @@ private:
         //X := SAT (φ);
         //Y := pre∃(X);
         //return Y
-        list<State> x = new list<State>();
-        list<State> y = new list<State>();
+        list<State> x;
+        list<State> y;
         x = SAT(expression);
         y = PreE(x);
         return y;
