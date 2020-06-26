@@ -389,22 +389,22 @@ private:
     // Handling AF
     list<State> SAT_AF(string expression)
     {
-        list<State> x = new list<State>();
-        x.AddRange(_kripke.States.ToArray());
-        list<State> y = new list<State>();
+        list<State> x;// = new list<State>();
+        x.assign( _kripke.States.begin(), _kripke.States.end());
+        list<State> y;// = new list<State>();
         y = SAT(expression);
 
         while (!ArelistStatesEqual(x, y))
         {
             x = y;
-            list<State> newY = new list<State>();
+            list<State> newY;// = new list<State>();
             list<State> preAStates = PreA(y);
-            newY.AddRange(y.ToArray());
+            newY.assign( y.begin(), y.end());
 
-            foreach (State state in preAStates)
+            for (State state : preAStates)
             {
-                if (!newY.Contains(state))
-                    newY.Add(state);
+                if ( newY.find(state) == string::npos) // WARNING: WHAT THE FUCK IS THE CONTAINS?
+                    newY.push_back(state);
             }
 
             y = newY;
