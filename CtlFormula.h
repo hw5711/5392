@@ -11,6 +11,7 @@
 
 #include <string>
 #include <list>
+#include <map>
 
 using namespace std;
 
@@ -40,16 +41,23 @@ public:
     KripkeStructure _kripke;
     State _state;
     string _expression;
-    Dictionary<string, string> _convertionString;
+	// modify
+    map<string, string> _convertionString;
 
     //constrctor
     CtlFormula(string expression, State state, KripkeStructure kripke)
     {
-        _convertionString = new Dictionary<string, string>();
-        _convertionString.Add("and", "&");
-        _convertionString.Add("or", "|");
-        _convertionString.Add("->", ">");
-        _convertionString.Add("not", "!");
+//         _convertionString = new Dictionary<string, string>();
+//         _convertionString.Add("and", "&");
+//         _convertionString.Add("or", "|");
+//         _convertionString.Add("->", ">");
+//         _convertionString.Add("not", "!");
+
+		// modify: consert dictionary to map
+		_convertionString["and"] = "&";
+		_convertionString["or"] = "|";
+		_convertionString["->"] = ">";
+		_convertionString["not"] = "!";
 
         _kripke = kripke;
         _state = state;
@@ -57,10 +65,21 @@ public:
     }
     string ConvertToSystemFormula(string expression)
     {
-        foreach (KeyValuePair<string, string> entry in _convertionString)
-        {
-            expression = expression.Replace(entry.Key.ToString(), entry.Value.ToString());
-        }
+//         foreach (KeyValuePair<string, string> entry in _convertionString)
+//         {
+//             expression = expression.Replace(entry.Key.ToString(), entry.Value.ToString());
+//         }
+
+		// modify
+		for (auto entry : _convertionString)
+		{
+			size_t pos = expression.find(entry.first);
+			while (pos != string::npos)
+			{
+				expression.replace(pos, entry.first.length(), entry.second);
+				pos = expression.find(entry.first, pos + entry.first.length() + 1);
+			}
+		}
 
         return expression;
     }
@@ -170,7 +189,7 @@ private:
     list<State> SAT(string expression)
     {
         System.Diagnostics.Debug.WriteLine(string.Format("Original Expression: {0}", expression));
-        list<State> states;// = new list<State>();
+        list<State> states = new list<State>();
 
         //from Logic in Computer Science, page 227
         string leftExpression = string.Empty, rightExpression = string.Empty;
@@ -193,9 +212,7 @@ private:
             //empty
             break;
         case Atomic:
-            //foreach (State state in _kripke.States)
-            list<States>::iterator iter;
-            for(iter = _kripke.States.begin();iter != _kripke.States.end(); iter++)
+            foreach (State state in _kripke.States)
             {
                 if (state.Atoms.Contains(leftExpression))
                     states.Add(state);
@@ -470,29 +487,31 @@ private:
     }
 
     // Determine whether given expression contains binary operation for the next checking
-    bool IsBinaryOp(string expression, string symbol, ref string leftExpression, ref string rightExpression)
+    bool IsBinaryOp(string expression, string sym, string &leftExpression, string &rightExpression)
     {
         bool isBinaryOp = false;
-        if (expression.Contains(symbol))
+        int len = expression.length();
+        char symbol = sym[0];
+        if (expression.find(symbol) != string::npos)
         {
             int openParanthesisCount = 0;
             int closeParanthesisCount = 0;
 
-            for (int i = 0; i < expression.Length; i++)
+            for (int i = 0; i < len; i++)
             {
-                string currentChar = expression.Substring(i, 1);
-                if (currentChar.Equals(symbol) && openParanthesisCount == closeParanthesisCount)
+                char currentChar = expression[i];
+                if (currentChar == symbol && openParanthesisCount == closeParanthesisCount)
                 {
-                    leftExpression = expression.Substring(0, i);
-                    rightExpression = expression.Substring(i + 1, expression.Length - i - 1);
+                    leftExpression = expression.substr(0, i);
+                    rightExpression = expression.substr(i + 1, len - i - 1);
                     isBinaryOp = true;
                     break;
                 }
-                else if (currentChar.Equals("("))
+                else if ( currentChar == '(')
                 {
                     openParanthesisCount++;
                 }
-                else if (currentChar.Equals(")"))
+                else if (currentChar == ')')
                 {
                     closeParanthesisCount++;
                 }
@@ -504,24 +523,25 @@ private:
     // Removing extra brackets
     string RemoveExtraBrackets(string expression)
     {
-        string newExpression = expression;
-        int openParanthesis = 0;
-        int closeParanthesis = 0;
-
-        if (expression.StartsWith("(") && expression.EndsWith(")"))
+	string newExpression = expression;
+	int openParanthesis = 0;
+	int closeParanthesis = 0;
+	int len = expression.length();
+		
+        if (expression[0] == '(' && expression[len-1] == ')')
         {
-            for (int i = 0; i < expression.Length - 1; i++)
+            for (int i = 0; i < len - 1; i++)
             {
-                string charExpression = expression.Substring(i, 1);
+                char charExpression = expression[i];
 
-                if (charExpression.Equals("("))
+                if (charExpression == '(')
                     openParanthesis++;
-                else if (charExpression.Equals(")"))
+                else if (charExpression == ')')
                     closeParanthesis++;
             }
 
             if (openParanthesis - 1 == closeParanthesis)
-                newExpression = expression.Substring(1, expression.Length - 2);
+                newExpression = expression.substr(1, len - 2);
         }
         return newExpression;
     }
