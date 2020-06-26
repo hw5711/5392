@@ -1,11 +1,9 @@
 //
 // Created by Huan wu on 6/25/20.
 
-
 #ifndef SATPROJECT_KRIPKESTRUCTURE_H
 #define SATPROJECT_KRIPKESTRUCTURE_H
 
-#include "CtlFormula.h"
 #include "State.h"
 #include "Transition.h"
 
