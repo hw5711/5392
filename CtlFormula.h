@@ -491,20 +491,42 @@ private:
         //{s âˆˆ S | exists s, (s â†’ s and s âˆˆ Y )}
         list<State> states; // = new list<State>();
 
-        list<Transition> transitions; // = new list<Transition>();
-        for (State sourceState : _kripke.States)
+        list<Transition> transitions = list<Transition>();
+
+        //        for (State sourceState : _kripke.States)
+        //        {
+        //            for (State destState : y)
+        //            {
+        ////                Transition myTransition;// = new Transition(sourceState, destState);
+        //                Transition myTransition =  Transition(sourceState, destState);
+        //                for( x : _kripke.Transitions)
+        //                    if ( x.find(myTransition) != string::npos)
+        //                    {
+        ////                        if (!states.Contains(sourceState))
+        //                        if(!check_list_contain_state(states, sourceState))
+        //                            states.push_back(sourceState);
+        //                    }
+        //            }
+        //        }
+
+        list<State>::iterator iter_sourceState;
+        for (iter_sourceState = _kripke.States.begin(); iter_sourceState != _kripke.States.end(); iter_sourceState++)
         {
-            for (State destState : y)
+            list<State>::iterator iter_destState;
+            for (iter_destState = y.begin(); iter_destState != y.end(); iter_destState++)
             {
-                //                Transition myTransition;// = new Transition(sourceState, destState);
-                Transition myTransition = Transition(sourceState, destState);
-                for (x : _kripke.Transitions)
-                    if (x.find(myTransition) != string::npos)
+                Transition myTransition = Transition(*iter_sourceState, *iter_destState);
+                list<Transition>::iterator iter_x;
+                for (iter_x = _kripke.Transitions.begin(); iter_x != _kripke.Transitions.end(); iter_x++)
+                {
+                    if (check_list_contain_transition(_kripke.Transitions, myTransition))
                     {
-                        //                        if (!states.Contains(sourceState))
-                        if (!check_list_contain_state(states, sourceState))
-                            states.push_back(sourceState);
+                        if (!check_list_contain_state(states, *iter_sourceState))
+                        {
+                            states.push_back(*iter_sourceState);
+                        }
                     }
+                }
             }
         }
 
@@ -666,6 +688,18 @@ private:
             if (iter_dest->Equals(src))
                 iter_dest = dest.erase(iter_dest);
         }
+    }
+
+    //add function to check contain situation in a list for Transition
+    bool check_list_contain_transition(list<Transition> &dest, Transition src)
+    {
+        list<Transition>::iterator iter_check_list;
+        for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
+        {
+            if (iter_check_list->Equals(src))
+                return true;
+        }
+        return false;
     }
 };
 
