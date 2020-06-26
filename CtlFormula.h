@@ -193,7 +193,9 @@ private:
             //empty
             break;
         case Atomic:
-            foreach (State state in _kripke.States)
+            //foreach (State state in _kripke.States)
+            list<States>::iterator iter;
+            for(iter = _kripke.States.begin();iter != _kripke.States.end(); iter++)
             {
                 if (state.Atoms.Contains(leftExpression))
                     states.Add(state);
