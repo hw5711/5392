@@ -5,8 +5,8 @@
 #ifndef SATPROJECT_TRANSITION_H
 #define SATPROJECT_TRANSITION_H
 
-#include "CtlFormula.h"
-#include "KripkeStructure.h"
+//#include "CtlFormula.h"
+//#include "KripkeStructure.h"
 #include "State.h"
 
 #include <string>
@@ -38,7 +38,7 @@ public:
 
     bool Equals(Transition other)
     {
-        if (this.FromState.Equals(other.FromState) && this.ToState.Equals(other.ToState))
+        if (FromState.Equals(other.FromState) && this.ToState.Equals(other.ToState))
             return true;
 
         return false;
