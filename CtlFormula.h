@@ -482,7 +482,7 @@ private:
     // Determine whether this is an atom
     bool IsAtomic(string expression)
     {
-    	for ( x: _kripke.Atoms)
+    	for ( string x: _kripke.Atoms)
     	{
         	if ( x.find(expression) != string::npos)
             	return true;
