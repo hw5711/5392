@@ -77,7 +77,7 @@ public:
             //State state = new State(stateName);
             State state;
             //if (!States.Contains(state))
-            if (std::find(std::begin(States), std::end(my_list), state) == std::end(state))
+            if (std::find(std::begin(States), std::end(States), state) == std::end(state))
                 //States.Add(new State(stateName));
                 States.push_back(State(stateName));
             else
