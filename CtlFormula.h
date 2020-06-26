@@ -353,32 +353,32 @@ private:
     // Handling EU
     list<State> SAT_EU(string leftExpression, string rightExpression)
     {
-        list<State> w = new list<State>();
-        list<State> x = new list<State>();
-        list<State> y = new list<State>();
+        list<State> w;// = new list<State>();
+        list<State> x;// = new list<State>();
+        list<State> y;// = new list<State>();
 
         w = SAT(leftExpression);
-        x.AddRange(_kripke.States.ToArray());
+        x.assign( _kripke.States.begin(), _kripke.States.end());
         y = SAT(rightExpression);
 
         while (!ArelistStatesEqual(x, y))
         {
             x = y;
-            list<State> newY = new list<State>();
+            list<State> newY;// = new list<State>();
             list<State> preEStates = PreE(y);
 
-            newY.AddRange(y.ToArray());
-            list<State> wAndPreE = new list<State>();
-            foreach (State state in w)
+            newY.assign( y.begin(), y.end());
+            list<State> wAndPreE;// = new list<State>();
+            for (State state : w)
             {
-                if (preEStates.Contains(state))
-                    wAndPreE.Add(state);
+                if ( preEStates.find(state) != preEStates.size())
+                    wAndPreE.push_back(state);
             }
 
-            foreach (State state in wAndPreE)
+            for (State state : wAndPreE)
             {
-                if (!newY.Contains(state))
-                    newY.Add(state);
+                if ( newY.find(state) == newY.size())
+                    newY.push_back(state);
             }
             y = newY;
         }
