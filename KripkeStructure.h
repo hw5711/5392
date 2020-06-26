@@ -76,12 +76,12 @@ public:
         {
             //State state = new State(stateName);
             State state;
-            //if (!States.Contains(state)) 
-            if(std::find(std::begin(States), std::end(my_list), state) == std::end(state))
+            //if (!States.Contains(state))
+            if (std::find(std::begin(States), std::end(my_list), state) == std::end(state))
                 //States.Add(new State(stateName));
                 States.push_back(State(stateName));
             else
-                throw new FormatException(string.Format("State {0} is defined more than once", stateName));
+                cout << string.Format("State {0} is defined more than once", stateName);
         }
 
         //load transitions
@@ -90,13 +90,13 @@ public:
             list<string> parsedTransition = transition.Split(new char[]{':'}).ToList();
 
             if (parsedTransition == null || parsedTransition.Count != 2)
-                throw new FormatException("Transition is not in the valid format");
+                cout << "Transition is not in the valid format";
 
             string transitionName = parsedTransition[0];
             list<string> parsedFromToStates = parsedTransition[1].Split(new char[]{'-'}).ToList();
 
             if (parsedFromToStates == null || parsedFromToStates.Count != 2)
-                throw new FormatException(string.Format("Transition {0} is not in [from state] - [to state] format", transitionName));
+                cout << string.Format("Transition {0} is not in [from state] - [to state] format", transitionName);
 
             string fromStateName = parsedFromToStates[0];
             string toStateName = parsedFromToStates[1];
@@ -104,14 +104,14 @@ public:
             State toState = FindStateByName(toStateName);
 
             if (fromState == null || toState == null)
-                throw new FormatException(string.Format("Invalid state is detected in transition {0}", transitionName));
+                cout << string.Format("Invalid state is detected in transition {0}", transitionName);
 
-            Transition transitionObj = new Transition(transitionName, fromState, toState);
+            Transition transitionObj = Transition(transitionName, fromState, toState);
             if (!Transitions.Contains(transitionObj))
                 Transitions.Add(transitionObj);
             else
             {
-                throw new FormatException(string.Format("Transitions from state {0} to state {1} are defined more than once", fromStateName, toStateName));
+                cout << string.Format("Transitions from state {0} to state {1} are defined more than once", fromStateName, toStateName);
             }
         }
 
@@ -121,26 +121,27 @@ public:
             list<string> parsedStateAtomStructure = stateAtomStructure.Split(new char[]{':'}).ToList();
 
             if (parsedStateAtomStructure == null || parsedStateAtomStructure.Count != 2)
-                throw new FormatException(string.Format("{0} is not a valid state: atoms definition", stateAtomStructure));
+                cout << string.Format("{0} is not a valid state: atoms definition", stateAtomStructure);
             string stateName = parsedStateAtomStructure[0].Replace(" ", string.Empty);
             string atomNames = parsedStateAtomStructure[1].Trim();
             list<string> parsedAtoms = atomNames.Split(new char[]{' '}).ToList();
 
-            list<string> stateAtoms = new list<string>();
+            list<string> stateAtoms = list<string>();
             for (string atom : parsedAtoms)
             {
-                if (string.IsNullOrEmpty(atom))
+                //                if (string.IsNullOrEmpty(atom))
+                if (atom == "")
                 {
                 }
                 else if (!stateAtoms.Contains(atom))
                     stateAtoms.Add(atom);
                 else
-                    throw new FormatException(string.Format("Atom {0} is defined more than once for state {1}", atom, stateName));
+                    cout << string.Format("Atom {0} is defined more than once for state {1}", atom, stateName);
             }
 
             State stateObj = FindStateByName(stateName);
             if (stateObj == null)
-                throw new FormatException(string.Format("State {0} is not defined", stateName));
+                cout << string.Format("State {0} is not defined", stateName);
             stateObj.Atoms = stateAtoms;
 
             //load to list of atoms
@@ -156,7 +157,7 @@ public:
     {
         for (State state : States)
         {
-            if (state.StateName.Equals(stateName))
+            if (state.StateName == stateName)
                 return state;
         }
 
