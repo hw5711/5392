@@ -233,7 +233,12 @@ private:
         {
         case AllTrue:
             //all states
-            states.AddRange(_kripke.States.ToArray());
+            //                states.AddRange(_kripke.States.ToArray());
+            list<State>::iterator iter_state_all_true;
+            for (iter_state_all_true = _kripke.States.begin(); iter_state_all_true != _kripke.States.end(); iter_state_all_true++)
+            {
+                states.push_back(*iter_state_all_true);
+            }
             break;
         case AllFalse:
             //empty
@@ -247,7 +252,12 @@ private:
             break;
         case Not:
             //S − SAT (φ1)
-            states.AddRange(_kripke.States.ToArray());
+            //                states.AddRange(_kripke.States.ToArray());
+            list<State>::iterator iter_state_not;
+            for (iter_state_not = _kripke.States.begin(); iter_state_not != _kripke.States.end(); iter_state_not++)
+            {
+                states.push_back(*iter_state_not);
+            }
             list<State> f1States = SAT(leftExpression);
 
             foreach (State state in f1States)
@@ -391,7 +401,12 @@ private:
         list<State> y = list<State>();
 
         w = SAT(leftExpression);
-        x.AddRange(_kripke.States.ToArray());
+        //        x.AddRange(_kripke.States.ToArray());
+        list<State>::iterator iter_state_x;
+        for (iter_state_x = _kripke.States.begin(); iter_state_x != _kripke.States.end(); iter_state_x++)
+        {
+            x.push_back(*iter_state_x);
+        }
         y = SAT(rightExpression);
 
         while (!ArelistStatesEqual(x, y))
@@ -400,7 +415,12 @@ private:
             list<State> newY = list<State>();
             list<State> preEStates = PreE(y);
 
-            newY.AddRange(y.ToArray());
+            //            newY.AddRange(y.ToArray());
+            list<State>::iterator iter_state_newY;
+            for (iter_state_newY = _kripke.States.begin(); iter_state_newY != _kripke.States.end(); iter_state_newY++)
+            {
+                newY.push_back(*iter_state_newY);
+            }
             list<State> wAndPreE = list<State>();
             foreach (State state in w)
             {
@@ -423,7 +443,12 @@ private:
     list<State> SAT_AF(string expression)
     {
         list<State> x = list<State>();
-        x.AddRange(_kripke.States.ToArray());
+        //        x.AddRange(_kripke.States.ToArray());
+        list<State>::iterator iter_state_x;
+        for (iter_state_x = _kripke.States.begin(); iter_state_x != _kripke.States.end(); iter_state_x++)
+        {
+            x.push_back(*iter_state_x);
+        }
         list<State> y = list<State>();
         y = SAT(expression);
 
@@ -432,7 +457,12 @@ private:
             x = y;
             list<State> newY = list<State>();
             list<State> preAStates = PreA(y);
-            newY.AddRange(y.ToArray());
+            //            newY.AddRange(y.ToArray());
+            list<State>::iterator iter_state_newY;
+            for (iter_state_newY = _kripke.States.begin(); iter_state_newY != _kripke.States.end(); iter_state_newY++)
+            {
+                newY.push_back(*iter_state_newY);
+            }
 
             foreach (State state in preAStates)
             {
@@ -479,7 +509,12 @@ private:
         list<State> PreEY = PreE(y);
 
         list<State> S_Minus_Y = list<State>();
-        S_Minus_Y.AddRange(_kripke.States.ToArray());
+        //        S_Minus_Y.AddRange(_kripke.States.ToArray());
+        list<State>::iterator iter_state_S_Minus_Y;
+        for (iter_state_S_Minus_Y = _kripke.States.begin(); iter_state_S_Minus_Y != _kripke.States.end(); iter_state_S_Minus_Y++)
+        {
+            S_Minus_Y.push_back(*iter_state_S_Minus_Y);
+        }
 
         foreach (State state in y)
         {
