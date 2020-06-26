@@ -30,25 +30,44 @@ public:
     KripkeStructure(string kripkeStructureDefinition) : KripkeStructure()
     {
 
-        list<string> parsedStructure = kripkeStructureDefinition
-                                           .Replace(Environment.NewLine, string.Empty)
-                                           .Split(new char[]{';'})
-                                           .ToList();
+        //        list<string> parsedStructure = kripkeStructureDefinition
+        //                .Replace(Environment.NewLine, string.Empty) //replace "\r\n"  by ""
+        //                .Split(new char[]{';'}) //split each ; into elements, use manually added split function
+        //                .ToList(); // store elements into a list
 
-        if (parsedStructure == null || parsedStructure.Count != 4)
+        list<string> parsedStructure;
+        replace_by_empty(kripkeStructureDefinition, "\r\n");
+        split_to_list(kripkeStructureDefinition, ";", parsedStructure);
+
+        if (parsedStructure.size() == 0 || parsedStructure.size() != 4)
             //throw new FormatException("Input file does not contain appropriate segments to construct kripke structure");
             cout << "Input file does not contain appropriate segments to construct kripke structure." << endl;
-        list<string> stateNames = parsedStructure[0]
-                                      .Replace(" ", string.Empty)
-                                      .Split(new char[]{','})
-                                      .ToList();
-        list<string> transitions = parsedStructure[1]
-                                       .Replace(" ", string.Empty)
-                                       .Split(new char[]{','})
-                                       .ToList();
-        list<string> stateAtomStructures = parsedStructure[2]
-                                               .Split(new char[]{','})
-                                               .ToList();
+        //        list<string> stateNames = parsedStructure[0]
+        //                .Replace(" ", string.Empty)
+        //                .Split(new char[]{','})
+        //                .ToList();
+        list<string> stateNames;
+        string src_0 = parsedStructure.front();
+        replace_by_empty(src_0, "\r\n");
+        split_to_list(src_0, ",", stateNames);
+        parsedStructure.pop_front();
+
+        //        list<string> transitions = parsedStructure[1]
+        //                .Replace(" ", string.Empty)
+        //                .Split(new char[]{','})
+        //                .ToList();
+        list<string> transitions;
+        string src_1 = parsedStructure.front();
+        replace_by_empty(src_1, "\r\n");
+        split_to_list(src_1, ",", transitions);
+        parsedStructure.pop_front();
+
+        //        list<string> stateAtomStructures = parsedStructure[2]
+        //                .Split(new char[]{','})
+        //                .ToList();
+        list<string> stateAtomStructures;
+        string src_2 = parsedStructure.front();
+        split_to_list(src_2, ",", stateAtomStructures);
 
         //load states
         //foreach (string stateName in stateNames)
@@ -186,6 +205,40 @@ public:
 
         sb.Append(string.Join(", ", transitionString.ToArray()));
         return sb.ToString();
+    }
+    
+    void replace_by_empty(string &src, string before)
+    {
+        while (src.find(before) != string::npos)
+        {
+            src.erase(src.find(before), 2);
+        }
+    }
+
+    //add a split function for handle string
+    void split_to_list(const string &src, const string &separator, list<string> &dest)
+    {
+        string str = src;
+        string substring;
+        string::size_type start = 0, index;
+        dest.clear();
+        index = str.find_first_of(separator, start);
+        do
+        {
+            if (index != string::npos)
+            {
+                substring = str.substr(start, index - start);
+                dest.push_back(substring);
+                start = index + separator.size();
+                index = str.find(separator, start);
+                if (start == string::npos)
+                    break;
+            }
+        } while (index != string::npos);
+
+        //the last part
+        substring = str.substr(start);
+        dest.push_back(substring);
     }
 };
 
