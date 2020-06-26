@@ -75,11 +75,11 @@ public:
         for (auto stateName : stateNames)
         {
             //State state = new State(stateName);
-            State state;
-            //if (!States.Contains(state))
-            if (std::find(std::begin(States), std::end(States), state) == std::end(States))
-                //States.Add(new State(stateName));
-                States.push_back(State(stateName));
+            State state = State(stateName);
+                          //if (!States.Contains(state))
+                          if (std::find(std::begin(States), std::end(States), state) == std::end(States))
+                          //States.Add(new State(stateName));
+                          States.push_back(State(stateName));
             else
                 cout << "State {0} is defined more than once " << stateName;
         }
