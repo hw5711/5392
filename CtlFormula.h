@@ -205,7 +205,7 @@ private:
             return AG;
         }
 
-        return Unknown;
+        return UnKnown;
     }
 
     // Determine states that satisfy given expression
@@ -232,18 +232,24 @@ private:
         switch (typeSAT)
         {
         case AllTrue:
+        {
             //all states
             //                states.AddRange(_kripke.States.ToArray());
             list<State>::iterator iter_state_all_true;
-            for (iter_state_all_true = _kripke.States.begin(); iter_state_all_true != _kripke.States.end(); iter_state_all_true++)
+            for (iter_state_all_true = _kripke.States.begin();
+                 iter_state_all_true != _kripke.States.end(); iter_state_all_true++)
             {
                 states.push_back(*iter_state_all_true);
             }
             break;
+        }
         case AllFalse:
+        {
             //empty
             break;
+        }
         case Atomic:
+        {
             //                foreach (State state in _kripke.States)
             //                {
             //                    if (state.Atoms.Contains(leftExpression))
@@ -258,7 +264,9 @@ private:
                 }
             }
             break;
+        }
         case Not:
+        {
             //S − SAT (φ1)
             //                states.AddRange(_kripke.States.ToArray());
             list<State>::iterator iter_state_not;
@@ -281,9 +289,10 @@ private:
                     remove_from_list(states, *iter_f1States);
                 }
             }
-
             break;
+        }
         case And:
+        {
             //SAT (φ1) ∩ SAT (φ2)
             list<State> andF1States = SAT(leftExpression);
             list<State> andF2States = SAT(rightExpression);
@@ -302,7 +311,9 @@ private:
                 }
             }
             break;
+        }
         case Or:
+        {
             //SAT (φ1) ∪ SAT (φ2)
             list<State> orF1States = SAT(leftExpression);
             list<State> orF2States = SAT(rightExpression);
@@ -322,14 +333,18 @@ private:
                 }
             }
             break;
+        }
         case Implies:
+        {
             //SAT (¬φ1 ∨ φ2)
             //TODO: reevaluate impliesFormula
             //                string impliesFormula = string.Concat("!", leftExpression, "|", rightExpression);
             string impliesFormula = "!" + leftExpression + "|" + rightExpression;
             states = SAT(impliesFormula);
             break;
+        }
         case AX:
+        {
             //SAT (¬EX¬φ1)
             //TODO: reevaluate axFormula
             //                string axFormula = string.Concat("!", "EX", "!", leftExpression);
@@ -353,7 +368,8 @@ private:
             for (iter_sourceState = states.begin(); iter_sourceState != states.end(); iter_sourceState++)
             {
                 list<Transition>::iterator iter_transition;
-                for (iter_transition = _kripke.Transitions.begin(); iter_transition != _kripke.Transitions.end(); iter_transition++)
+                for (iter_transition = _kripke.Transitions.begin();
+                     iter_transition != _kripke.Transitions.end(); iter_transition++)
                 {
                     if (iter_sourceState->Equals(iter_transition->FromState))
                     {
@@ -364,13 +380,17 @@ private:
             }
             states = tempStates;
             break;
+        }
         case EX:
+        {
             //SATEX(φ1)
             //TODO: reevaluate exFormula
             string exFormula = leftExpression;
             states = SAT_EX(exFormula);
             break;
+        }
         case AU:
+        {
             //A[φ1 U φ2]
             //SAT(¬(E[¬φ2 U (¬φ1 ∧¬φ2)] ∨ EG¬φ2))
             //TODO: reevaluate auFormulaBuilder
@@ -387,39 +407,50 @@ private:
             auFormulaBuilder.append("))");
             states = SAT(auFormulaBuilder);
             break;
+        }
         case EU:
+        {
             //SATEU(φ1, φ2)
             //TODO: reevaluate euFormula
             states = SAT_EU(leftExpression, rightExpression);
             break;
+        }
         case EF:
+        {
             //SAT (E( U φ1))
             //TODO: reevaluate efFormula
             //                string efFormula = string.Concat("E(TU", leftExpression, ")");
             string efFormula = "E(TU" + leftExpression + ")";
             states = SAT(efFormula);
             break;
+        }
         case EG:
+        {
             //SAT(¬AF¬φ1)
             //TODO: reevaulate egFormula
             //                string egFormula = string.Concat("!AF!", leftExpression);
             string egFormula = "!AF!" + leftExpression;
             states = SAT(egFormula);
             break;
+        }
         case AF:
+        {
             //SATAF (φ1)
             //TODO: reevaluate afFormula
             string afFormula = leftExpression;
             states = SAT_AF(afFormula);
             break;
+        }
         case AG:
+        {
             //SAT (¬EF¬φ1)
             //TODO: reevaluate agFormula
             //                string agFormula = string.Concat("!EF!", leftExpression);
             string agFormula = "!EF!" + leftExpression;
             states = SAT(agFormula);
             break;
-        case Unknown:
+        }
+        case UnKnown:
             cout << "Invalid CTL expression";
         }
 
