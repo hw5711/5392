@@ -403,7 +403,7 @@ private:
 
             for (State state : preAStates)
             {
-                if ( newY.find(state) == newY.length()) // WARNING: WHAT THE FUCK IS THE CONTAINS?
+                if ( newY.find(state) == newY.length())
                     newY.push_back(state);
             }
 
