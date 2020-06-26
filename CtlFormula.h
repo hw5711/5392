@@ -244,10 +244,18 @@ private:
             //empty
             break;
         case Atomic:
-            foreach (State state in _kripke.States)
+            //                foreach (State state in _kripke.States)
+            //                {
+            //                    if (state.Atoms.Contains(leftExpression))
+            //                        states.Add(state);
+            //                }
+            list<State>::iterator iter_atomic;
+            for (iter_atomic = _kripke.States.begin(); iter_atomic != _kripke.States.end(); iter_atomic++)
             {
-                if (state.Atoms.Contains(leftExpression))
-                    states.Add(state);
+                if (check_list_contain_string(iter_atomic->Atom, leftExpression))
+                {
+                    states.push_back(*iter_atomic);
+                }
             }
             break;
         case Not:
@@ -280,10 +288,18 @@ private:
             list<State> andF1States = SAT(leftExpression);
             list<State> andF2States = SAT(rightExpression);
 
-            foreach (State state in andF1States)
+            //                foreach (State state in andF1States)
+            //                {
+            //                    if (andF2States.Contains(state))
+            //                        states.Add(state);
+            //                }
+            list<State>::iterator iter_and;
+            for (iter_and = andF1States.begin(); iter_and != andF1States.end(); iter_and++)
             {
-                if (andF2States.Contains(state))
-                    states.Add(state);
+                if (check_list_contain_state(andF2States, *iter_and))
+                {
+                    states.push_back(*iter_and);
+                }
             }
             break;
         case Or:
@@ -292,10 +308,18 @@ private:
             list<State> orF2States = SAT(rightExpression);
 
             states = orF1States;
-            foreach (State state in orF2States)
+            //                foreach (State state in orF2States)
+            //                {
+            //                    if (!states.Contains(state))
+            //                        states.Add(state);
+            //                }
+            list<State>::iterator iter_or;
+            for (iter_or = orF2States.begin(); iter_or != orF2States.end(); iter_or++)
             {
-                if (!states.Contains(state))
-                    states.Add(state);
+                if (!check_list_contain_state(states, *iter_or))
+                {
+                    states.push_back(*iter_or);
+                }
             }
             break;
         case Implies:
@@ -314,13 +338,26 @@ private:
 
             //check if states actually has link to next state
             list<State> tempStates = list<State>();
-            foreach (State sourceState in states)
+            //                foreach (State sourceState in states)
+            //                {
+            //                    foreach (Transition transition in _kripke.Transitions)
+            //                    {
+            //                        if (sourceState.Equals(transition.FromState))
+            //                        {
+            //                            tempStates.Add(sourceState);
+            //                            break;
+            //                        }
+            //                    }
+            //                }
+            list<State>::iterator iter_sourceState;
+            for (iter_sourceState = states.begin(); iter_sourceState != states.end(); iter_sourceState++)
             {
-                foreach (Transition transition in _kripke.Transitions)
+                list<Transition>::iterator iter_transition;
+                for (iter_transition = _kripke.Transitions.begin(); iter_transition != _kripke.Transitions.end(); iter_transition++)
                 {
-                    if (sourceState.Equals(transition.FromState))
+                    if (iter_sourceState->Equals(iter_transition->FromState))
                     {
-                        tempStates.Add(sourceState);
+                        tempStates.push_back(*iter_sourceState);
                         break;
                     }
                 }
@@ -430,17 +467,34 @@ private:
             {
                 newY.push_back(*iter_state_newY);
             }
+
             list<State> wAndPreE = list<State>();
-            foreach (State state in w)
+            //            foreach (State state in w)
+            //            {
+            //                if (preEStates.Contains(state))
+            //                    wAndPreE.Add(state);
+            //            }
+            list<State>::iterator iter_state_w;
+            for (iter_state_w = w.begin(); iter_state_w != w.end(); iter_state_w++)
             {
-                if (preEStates.Contains(state))
-                    wAndPreE.Add(state);
+                if (check_list_contain_state(preEStates, *iter_state_w))
+                {
+                    wAndPreE.push_back(*iter_state_w);
+                }
             }
 
-            foreach (State state in wAndPreE)
+            //            foreach (State state in wAndPreE)
+            //            {
+            //                if (!newY.Contains(state))
+            //                    newY.Add(state);
+            //            }
+            list<State>::iterator iter_wAndPreE;
+            for (iter_wAndPreE = wAndPreE.begin(); iter_wAndPreE != wAndPreE.end(); iter_wAndPreE++)
             {
-                if (!newY.Contains(state))
-                    newY.Add(state);
+                if (!check_list_contain_state(newY, *iter_wAndPreE))
+                {
+                    newY.push_back(*iter_wAndPreE);
+                }
             }
             y = newY;
         }
@@ -473,12 +527,19 @@ private:
                 newY.push_back(*iter_state_newY);
             }
 
-            foreach (State state in preAStates)
+            //            foreach (State state in preAStates)
+            //            {
+            //                if (!newY.Contains(state))
+            //                    newY.Add(state);
+            //            }
+            list<State>::iterator iter_preAStates;
+            for (iter_preAStates = preAStates.begin(); iter_preAStates != preAStates.end(); iter_preAStates++)
             {
-                if (!newY.Contains(state))
-                    newY.Add(state);
+                if (!check_list_contain_state(newY, *iter_preAStates))
+                {
+                    newY.push_back(*iter_preAStates);
+                }
             }
-
             y = newY;
         }
 
@@ -588,10 +649,18 @@ private:
         if (list1.size() != list2.size())
             return false;
 
-        for (State state : list1)
+        //        for (State state : list1)
+        //        {
+        //            if ( list2.find(state) == string::npos)
+        //                return false;
+        //        }
+        list<State>::iterator iter_list1;
+        for (iter_list1 = list1.begin(); iter_list1 != list1.end(); iter_list1++)
         {
-            if (list2.find(state) == string::npos)
+            if (check_list_contain_state(list2, *iter_list1))
+            {
                 return false;
+            }
         }
 
         return true;
@@ -600,11 +669,13 @@ private:
     // Determine whether this is an atom
     bool IsAtomic(string expression)
     {
-        for (string x : _kripke.Atoms)
-        {
-            if (x.find(expression) != string::npos)
-                return true;
-        }
+        //        for ( string x: _kripke.Atoms)
+        //        {
+        //            if ( x.find(expression) != string::npos)
+        //                return true;
+        //        }
+        if (check_list_contain_string(_kripke.Atoms, expression))
+            return true;
         return false;
     }
 
@@ -680,6 +751,7 @@ private:
         return false;
     }
 
+    //add remove an element function to list<State>
     void remove_from_list(list<State> &dest, State src)
     {
         list<State>::iterator iter_dest;
@@ -697,6 +769,18 @@ private:
         for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
         {
             if (iter_check_list->Equals(src))
+                return true;
+        }
+        return false;
+    }
+
+    //add function to check contain situation in a list for string
+    bool check_list_contain_string(list<string> &dest, string src)
+    {
+        list<string>::iterator iter_check_list;
+        for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
+        {
+            if (*iter_check_list == src)
                 return true;
         }
         return false;
