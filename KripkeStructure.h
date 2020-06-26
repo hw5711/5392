@@ -119,7 +119,7 @@ public:
 
             Transition transitionObj = Transition(transitionName, fromState, toState);
             if (!Transitions.Contains(transitionObj))
-                Transitions.Add(transitionObj);
+                Transitions.push_back(transitionObj);
             else
             {
                 cout << "Transitions from state " << fromStateName << " to state " << toStateName << " are defined more than once";
@@ -319,7 +319,7 @@ public:
     }
 
     //add function to check contain situation in a list for string
-    bool check_list_contain_string(const list<string> &dest, string src)
+    bool check_list_contain_string(list<string> &dest, string src)
     {
         list<string>::iterator iter_check_list;
         for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
@@ -329,6 +329,16 @@ public:
         }
         return false;
     }
+
+    //add function to check contain situation in a list for Transition
+    //    bool check_list_contain_transition(const list<Transition> &dest, Transition src){
+    //        list<Transition>::iterator iter_check_list;
+    //        for(iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++){
+    //            if(*iter_check_list ???? )
+    //                return true;
+    //        }
+    //        return false;
+    //    }
 };
 
 #endif //SATPROJECT_KRIPKESTRUCTURE_H
