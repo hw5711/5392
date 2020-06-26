@@ -466,12 +466,12 @@ private:
     // Determine whether the list contain same set of states
     bool ArelistStatesEqual(list<State> list1, list<State> list2)
     {
-        if (list1.Count != list2.Count)
+        if (list1.size() != list2.size())
             return false;
 
-        foreach (State state in list1)
+        for (State state : list1)
         {
-            if (!list2.Contains(state))
+            if ( list2.find(state) == string::npos)
                 return false;
         }
 
@@ -481,9 +481,12 @@ private:
     // Determine whether this is an atom
     bool IsAtomic(string expression)
     {
-        if (_kripke.Atoms.Contains(expression))
-            return true;
-        return false;
+    	for ( x: _kripke.Atoms)
+    	{
+        	if ( x.find(expression) != string::npos)
+            	return true;
+    	}
+		return false;
     }
 
     // Determine whether given expression contains binary operation for the next checking
