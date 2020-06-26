@@ -10,6 +10,7 @@
 #include <list>
 #include <string>
 #include <algorithm>
+#include <iostream>
 
 using namespace std;
 
@@ -206,7 +207,7 @@ public:
         sb.Append(string.Join(", ", transitionString.ToArray()));
         return sb.ToString();
     }
-    
+
     void replace_by_empty(string &src, string before)
     {
         while (src.find(before) != string::npos)
