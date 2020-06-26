@@ -71,19 +71,39 @@ public:
         split_to_list(src_2, ",", stateAtomStructures);
 
         //load states
-        //foreach (string stateName in stateNames)
-        for (auto stateName : stateNames)
+        //        foreach (string stateName in stateNames)
+        //        {
+        //            State state = new State(stateName);
+        //            if (!States.Contains(state))
+        //                States.Add(new State(stateName));
+        //            else
+        //                throw new FormatException(string.Format("State {0} is defined more than once", stateName));
+        //        }
+
+        list<string>::iterator iter_state_names;
+        for (iter_state_names = stateNames.begin(); iter_state_names != stateNames.end(); iter_state_names++)
         {
-            //State state = new State(stateName);
-            State state = State(stateName);
-            //if (!States.Contains(state))
-            //            if (std::find(std::begin(States), std::end(States), state) == std::end(States))
-            if (find(begin(States), end(States), state) == end(States))
-                //States.Add(new State(stateName));
-                States.push_back(State(stateName));
+            State state = State(*iter_state_names);
+            if (!check_list_contain_state(States, state))
+            {
+                States.push_back(State(*iter_state_names));
+            }
             else
-                cout << "State {0} is defined more than once " << stateName;
+                cout << "State " << *iter_state_names << "is defined more than once.";
         }
+
+        //        for (auto stateName : stateNames)
+        //        {
+        //            //State state = new State(stateName);
+        //            State state = State(stateName);
+        //            //if (!States.Contains(state))
+        //            if (std::find(std::begin(States), std::end(States), state) == std::end(States))
+        ////            if (find(begin(States), end(States), state) == end(States))
+        //                //States.Add(new State(stateName));
+        //                States.push_back(State(stateName));
+        //            else
+        //                cout << "State {0} is defined more than once " << stateName;
+        //        }
 
         //load transitions
         for (string transition : transitions)
@@ -115,7 +135,7 @@ public:
             State fromState = FindStateByName(fromStateName);
             State toState = FindStateByName(toStateName);
 
-            if (&fromState == nullptr || &toState == nullptr)
+            if (fromState.StateName == "invalid" || toState.StateName == "invalid")
                 cout << "Invalid state is detected in transition " << transitionName;
 
             Transition transitionObj = Transition(transitionName, fromState, toState);
@@ -167,7 +187,7 @@ public:
             }
 
             State stateObj = FindStateByName(stateName);
-            if (&stateObj == NULL)
+            if (stateObj.StateName == "invalid")
                 cout << "State " << stateName << " is not defined";
             stateObj.Atom = stateAtoms;
 
@@ -196,7 +216,7 @@ public:
         }
 
         //        return null;
-        return State(nullptr); // need to test
+        return State("invalid"); // need to test
     }
 
     string ToString()
@@ -347,6 +367,18 @@ public:
         for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
         {
             if (iter_check_list->Equals(src))
+                return true;
+        }
+        return false;
+    }
+
+    //add function to check contain situation in a list for state
+    bool check_list_contain_state(list<State> &dest, State src)
+    {
+        list<State>::iterator iter_check_list;
+        for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
+        {
+            if (iter_check_list->StateName == src.StateName && &iter_check_list->Atom == &src.Atom)
                 return true;
         }
         return false;
