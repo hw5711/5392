@@ -260,11 +260,20 @@ private:
             }
             list<State> f1States = SAT(leftExpression);
 
-            foreach (State state in f1States)
+            //                foreach (State state in f1States)
+            //                {
+            //                    if (states.Contains(state))
+            //                        states.Remove(state);
+            //                }
+            list<State>::iterator iter_f1States;
+            for (iter_f1States = f1States.begin(); iter_f1States != f1States.end(); iter_f1States++)
             {
-                if (states.Contains(state))
-                    states.Remove(state);
+                if (check_list_contain_state(states, *iter_f1States))
+                {
+                    remove_from_list(states, *iter_f1States);
+                }
             }
+
             break;
         case And:
             //SAT (φ1) ∩ SAT (φ2)
@@ -516,19 +525,36 @@ private:
             S_Minus_Y.push_back(*iter_state_S_Minus_Y);
         }
 
-        foreach (State state in y)
+        //        foreach (State state in y)
+        //        {
+        //            if (S_Minus_Y.Contains(state))
+        //                S_Minus_Y.Remove(state);
+        //        }
+
+        list<State>::iterator iter_y;
+        for (iter_y = y.begin(); iter_y != y.end(); iter_y++)
         {
-            if (S_Minus_Y.Contains(state))
-                S_Minus_Y.Remove(state);
+            if (check_list_contain_state(S_Minus_Y, *iter_y))
+            {
+                remove_from_list(S_Minus_Y, *iter_y);
+            }
         }
 
         list<State> PreE_S_Minus_Y = PreE(S_Minus_Y);
 
         //PreEY - PreE(S-Y)
-        foreach (State state in PreE_S_Minus_Y)
+        //        foreach (State state in PreE_S_Minus_Y)
+        //        {
+        //            if (PreEY.Contains(state))
+        //                PreEY.Remove(state);
+        //        }
+        list<State>::iterator iter_PreE_S_Minus_Y;
+        for (iter_PreE_S_Minus_Y = PreE_S_Minus_Y.begin(); iter_PreE_S_Minus_Y != PreE_S_Minus_Y.end(); iter_PreE_S_Minus_Y++)
         {
-            if (PreEY.Contains(state))
-                PreEY.Remove(state);
+            if (check_list_contain_state(PreEY, *iter_PreE_S_Minus_Y))
+            {
+                remove_from_list(PreEY, *iter_PreE_S_Minus_Y);
+            }
         }
 
         return PreEY;
@@ -630,6 +656,16 @@ private:
                 return true;
         }
         return false;
+    }
+
+    void remove_from_list(list<State> &dest, State src)
+    {
+        list<State>::iterator iter_dest;
+        for (iter_dest = dest.begin(); iter_dest != dest.end(); iter_dest++)
+        {
+            if (iter_dest->Equals(src))
+                iter_dest = dest.erase(iter_dest);
+        }
     }
 };
 
