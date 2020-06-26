@@ -81,50 +81,75 @@ public:
                 //States.Add(new State(stateName));
                 States.push_back(State(stateName));
             else
-                cout << string.Format("State {0} is defined more than once", stateName);
+                cout << "State {0} is defined more than once " << stateName;
         }
 
         //load transitions
         for (string transition : transitions)
         {
-            list<string> parsedTransition = transition.Split(new char[]{':'}).ToList();
+            //            list<string> parsedTransition = transition.Split(new char[]{':'}).ToList();
+            list<string> parsedTransition;
+            split_to_list(transition, ":", parsedTransition);
 
-            if (parsedTransition == null || parsedTransition.Count != 2)
+            if (parsedTransition.size() == 0 || parsedTransition.size() != 2)
                 cout << "Transition is not in the valid format";
 
-            string transitionName = parsedTransition[0];
-            list<string> parsedFromToStates = parsedTransition[1].Split(new char[]{'-'}).ToList();
+            //          string transitionName = parsedTransition[0];
+            //          list<string> parsedFromToStates = parsedTransition[1].Split(new char[]{'-'}).ToList();
+            string transitionName = parsedTransition.front();
+            parsedTransition.pop_front();
+            list<string> parsedFromToStates;
+            string parsedTransition_1;
+            split_to_list(parsedTransition_1, "-", parsedFromToStates);
 
-            if (parsedFromToStates == null || parsedFromToStates.Count != 2)
-                cout << string.Format("Transition {0} is not in [from state] - [to state] format", transitionName);
+            if (parsedFromToStates.size() == 0 || parsedFromToStates.size() != 2)
+                cout << "Transition {0} is not in [from state] - [to state] format " << transitionName;
 
-            string fromStateName = parsedFromToStates[0];
-            string toStateName = parsedFromToStates[1];
+            //            string fromStateName = parsedFromToStates[0];
+            //            string toStateName = parsedFromToStates[1];
+            string fromStateName = parsedFromToStates.front();
+            parsedFromToStates.pop_front();
+            string toStateName = parsedFromToStates.front();
+
             State fromState = FindStateByName(fromStateName);
             State toState = FindStateByName(toStateName);
 
-            if (fromState == null || toState == null)
-                cout << string.Format("Invalid state is detected in transition {0}", transitionName);
+            if (&fromState == NULL || &toState == NULL)
+                cout << "Invalid state is detected in transition " << transitionName;
 
             Transition transitionObj = Transition(transitionName, fromState, toState);
             if (!Transitions.Contains(transitionObj))
                 Transitions.Add(transitionObj);
             else
             {
-                cout << string.Format("Transitions from state {0} to state {1} are defined more than once", fromStateName, toStateName);
+                cout << "Transitions from state " << fromStateName << " to state " << toStateName << " are defined more than once";
             }
         }
 
         //load atoms
         for (string stateAtomStructure : stateAtomStructures)
         {
-            list<string> parsedStateAtomStructure = stateAtomStructure.Split(new char[]{':'}).ToList();
+            //            list<string> parsedStateAtomStructure = stateAtomStructure.Split(new char[]{':'}).ToList();
+            list<string> parsedStateAtomStructure;
+            split_to_list(stateAtomStructure, ":", parsedStateAtomStructure);
 
-            if (parsedStateAtomStructure == null || parsedStateAtomStructure.Count != 2)
-                cout << string.Format("{0} is not a valid state: atoms definition", stateAtomStructure);
-            string stateName = parsedStateAtomStructure[0].Replace(" ", string.Empty);
-            string atomNames = parsedStateAtomStructure[1].Trim();
-            list<string> parsedAtoms = atomNames.Split(new char[]{' '}).ToList();
+            if (parsedStateAtomStructure.size() == 0 || parsedStateAtomStructure.size() != 2)
+                cout << stateAtomStructure << " is not a valid state: atoms definition";
+            //           string stateName = parsedStateAtomStructure[0].Replace(" ", string.Empty);
+            string stateName;
+            string parsedStateAtomStructure_0 = parsedStateAtomStructure.front();
+            replace_by_empty(parsedStateAtomStructure_0, " ");
+            stateName = parsedStateAtomStructure_0;
+            parsedStateAtomStructure.pop_front();
+
+            //           string atomNames = parsedStateAtomStructure[1].Trim();
+            string atomNames;
+            string parsedStateAtomStructure_1 = parsedStateAtomStructure.front();
+            atomNames = trim(parsedStateAtomStructure_1);
+
+            //            list<string> parsedAtoms = atomNames.Split(new char[]{' '}).ToList();
+            list<string> parsedAtoms;
+            split_to_list(atomNames, " ", parsedAtoms);
 
             list<string> stateAtoms = list<string>();
             for (string atom : parsedAtoms)
@@ -133,22 +158,22 @@ public:
                 if (atom == "")
                 {
                 }
-                else if (!stateAtoms.Contains(atom))
-                    stateAtoms.Add(atom);
+                else if (!check_list_contain_string(stateAtoms, atom))
+                    stateAtoms.push_back(atom);
                 else
-                    cout << string.Format("Atom {0} is defined more than once for state {1}", atom, stateName);
+                    cout << "Atom " << atom << " is defined more than once for state " << stateName;
             }
 
             State stateObj = FindStateByName(stateName);
-            if (stateObj == null)
-                cout << string.Format("State {0} is not defined", stateName);
-            stateObj.Atoms = stateAtoms;
+            if (&stateObj == NULL)
+                cout << "State " << stateName << " is not defined";
+            stateObj.Atom = stateAtoms;
 
             //load to list of atoms
             for (string atom : stateAtoms)
             {
-                if (!Atoms.Contains(atom))
-                    Atoms.Add(atom);
+                if (!check_list_contain_string(Atoms, atom))
+                    Atoms.push_back(atom);
             }
         }
     }
@@ -166,49 +191,81 @@ public:
 
     string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        //        StringBuilder sb = new StringBuilder();
+        string sb;
 
-        sb.AppendLine("STATES");
-        sb.AppendLine("-----------");
-        sb.Append(StatesToString());
-        sb.AppendLine();
-        sb.AppendLine();
-        sb.AppendLine("TRANSITIONS");
-        sb.AppendLine("-------------------");
-        sb.Append(TransitionsToString());
+        //        sb.append("STATES");
+        //        sb.AppendLine("-----------");
+        //        sb.Append(StatesToString());
+        //        sb.AppendLine();
+        //        sb.AppendLine();
+        //        sb.AppendLine("TRANSITIONS");
+        //        sb.AppendLine("-------------------");
+        //        sb.Append(TransitionsToString());
 
-        return sb.ToString();
+        sb.append("STATES\r\n");
+        sb.append("-----------\r\n");
+        sb.append(StatesToString());
+        sb.append("\r\n");
+        sb.append("\r\n");
+        sb.append("\r\n");
+        sb.append("TRANSITIONS\r\n");
+        sb.append("-------------------\r\n");
+        sb.append(TransitionsToString());
+        sb.append("\r\n");
+
+        return sb;
     }
 
     string StatesToString()
     {
-        StringBuilder sb; // = new StringBuilder();
+        string sb; // = new StringBuilder();
 
         list<string> stateStrings; // = new list<string>();
         for (State state : States)
         {
-            string atomNames = string.Join(", ", state.Atoms.ToArray());
-            stateStrings.push_back(string.Format("{0}({1})", state.StateName, atomNames));
+            //            string atomNames = string.Join(", ", state.Atoms.ToArray());
+            string atomNames;
+            list<string>::iterator iter_atoms;
+            for (iter_atoms = state.Atom.begin(); iter_atoms != state.Atom.end(); iter_atoms++)
+            {
+                atomNames.append(*iter_atoms);
+            }
+
+            //          stateStrings.push_back(string.Format("{0}({1})", state.StateName, atomNames));
+            stateStrings.push_back(state.StateName + "(" + atomNames + ")");
         }
 
-        sb.Append(string.Join(", ", stateStrings.ToArray()));
-        return sb.ToString();
+        //        sb.Append(string.Join(", ", stateStrings.ToArray()));
+        list<string>::iterator iter_stateString;
+        for (iter_stateString = stateStrings.begin(); iter_stateString != stateStrings.end(); iter_stateString++)
+        {
+            sb.append(*iter_stateString);
+        }
+        return sb;
     }
 
     string TransitionsToString()
     {
-        StringBuilder sb = new StringBuilder();
+        string sb;
 
         list<string> transitionString; // = new list<string>();
         for (Transition transition : Transitions)
         {
-            transitionString.push_back(string.Format("{0}({1} -> {2})", transition.TransitionName, transition.FromState.StateName, transition.ToState.StateName));
+            //            transitionString.push_back(string.Format("{0}({1} -> {2})", transition.TransitionName, transition.FromState.StateName, transition.ToState.StateName));
+            transitionString.push_back(transition.TransitionName + "(" + transition.FromState.StateName + " -> " + transition.ToState.StateName + ")");
         }
 
-        sb.Append(string.Join(", ", transitionString.ToArray()));
-        return sb.ToString();
+        //        sb.Append(string.Join(", ", transitionString.ToArray()));
+        list<string>::iterator iter_transitionString;
+        for (iter_transitionString = transitionString.begin(); iter_transitionString != transitionString.end(); iter_transitionString++)
+        {
+            sb.append(*iter_transitionString);
+        }
+        return sb;
     }
 
+    //add a replace function for handle string
     void replace_by_empty(string &src, string before)
     {
         while (src.find(before) != string::npos)
@@ -241,6 +298,36 @@ public:
         //the last part
         substring = str.substr(start);
         dest.push_back(substring);
+    }
+
+    //add trim functions for trim string
+    string ltrim(const string &s)
+    {
+        size_t start = s.find_first_not_of(" \n\r\t\f\v");
+        return (start == string::npos) ? "" : s.substr(start);
+    }
+
+    string rtrim(const string &s)
+    {
+        size_t end = s.find_last_not_of(" \n\r\t\f\v");
+        return (end == string::npos) ? "" : s.substr(0, end + 1);
+    }
+
+    string trim(const string &s)
+    {
+        return rtrim(ltrim(s));
+    }
+
+    //add function to check contain situation in a list for string
+    bool check_list_contain_string(const list<string> &dest, string src)
+    {
+        list<string>::iterator iter_check_list;
+        for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
+        {
+            if (*iter_check_list == src)
+                return true;
+        }
+        return false;
     }
 };
 
