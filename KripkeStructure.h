@@ -114,11 +114,12 @@ public:
             State fromState = FindStateByName(fromStateName);
             State toState = FindStateByName(toStateName);
 
-            if (&fromState == NULL || &toState == NULL)
+            if (&fromState == nullptr || &toState == nullptr)
                 cout << "Invalid state is detected in transition " << transitionName;
 
             Transition transitionObj = Transition(transitionName, fromState, toState);
-            if (!Transitions.Contains(transitionObj))
+            //            if (!Transitions.Contains(transitionObj))
+            if (check_list_contain_transition(Transitions, transitionObj))
                 Transitions.push_back(transitionObj);
             else
             {
@@ -180,13 +181,21 @@ public:
 
     State FindStateByName(string stateName)
     {
-        for (State state : States)
+        //        for (State state : States)
+        //        {
+        //            if (state.StateName == stateName)
+        //                return state;
+        //        }
+
+        list<State>::iterator it;
+        for (it = States.begin(); it != States.end(); it++)
         {
-            if (state.StateName == stateName)
-                return state;
+            if (it->StateName == stateName)
+                return *it;
         }
 
-        return null;
+        //        return null;
+        return State(nullptr); // need to test
     }
 
     string ToString()
@@ -331,14 +340,16 @@ public:
     }
 
     //add function to check contain situation in a list for Transition
-    //    bool check_list_contain_transition(const list<Transition> &dest, Transition src){
-    //        list<Transition>::iterator iter_check_list;
-    //        for(iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++){
-    //            if(*iter_check_list ???? )
-    //                return true;
-    //        }
-    //        return false;
-    //    }
+    bool check_list_contain_transition(list<Transition> &dest, Transition src)
+    {
+        list<Transition>::iterator iter_check_list;
+        for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
+        {
+            if (iter_check_list->Equals(src))
+                return true;
+        }
+        return false;
+    }
 };
 
 #endif //SATPROJECT_KRIPKESTRUCTURE_H
