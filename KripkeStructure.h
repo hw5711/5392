@@ -124,11 +124,11 @@ public:
             split_to_list(parsedTransition_1, "-", parsedFromToStates);
 
             if (parsedFromToStates.size() == 0 || parsedFromToStates.size() != 2)
-                cout << "Transition {0} is not in [from state] - [to state] format " << transitionName;
+                cout << "Transition " << transitionName <<  " is not in[from state] - [to state] format ";
 
-            //            string fromStateName = parsedFromToStates[0];
-            //            string toStateName = parsedFromToStates[1];
-            string fromStateName = parsedFromToStates.front();
+                                             //            string fromStateName = parsedFromToStates[0];
+                                             //            string toStateName = parsedFromToStates[1];
+                                             string fromStateName = parsedFromToStates.front();
             parsedFromToStates.pop_front();
             string toStateName = parsedFromToStates.front();
 
