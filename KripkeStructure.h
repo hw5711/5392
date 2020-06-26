@@ -42,7 +42,7 @@ public:
 
         if (parsedStructure.size() == 0 || parsedStructure.size() != 4)
             //throw new FormatException("Input file does not contain appropriate segments to construct kripke structure");
-            cout << "Input file does not contain appropriate segments to construct kripke structure." << endl;
+            cout << "\nInput file does not contain appropriate segments to construct kripke structure." << endl;
         //        list<string> stateNames = parsedStructure[0]
         //                .Replace(" ", string.Empty)
         //                .Split(new char[]{','})
@@ -89,7 +89,7 @@ public:
                 States.push_back(State(*iter_state_names));
             }
             else
-                cout << "State " << *iter_state_names << "is defined more than once.";
+                cout << "\nState " << *iter_state_names << "is defined more than once.";
         }
 
         //        for (auto stateName : stateNames)
@@ -113,7 +113,7 @@ public:
             split_to_list(transition, ":", parsedTransition);
 
             if (parsedTransition.size() == 0 || parsedTransition.size() != 2)
-                cout << "Transition is not in the valid format";
+                cout << "\nTransition is not in the valid format";
 
             //          string transitionName = parsedTransition[0];
             //          list<string> parsedFromToStates = parsedTransition[1].Split(new char[]{'-'}).ToList();
@@ -124,7 +124,7 @@ public:
             split_to_list(parsedTransition_1, "-", parsedFromToStates);
 
             if (parsedFromToStates.size() == 0 || parsedFromToStates.size() != 2)
-                cout << "Transition " << transitionName <<  " is not in[from state] - [to state] format ";
+                cout << "\nTransition " << transitionName <<  " is not in[from state] - [to state] format ";
 
                                              //            string fromStateName = parsedFromToStates[0];
                                              //            string toStateName = parsedFromToStates[1];
@@ -136,7 +136,7 @@ public:
             State toState = FindStateByName(toStateName);
 
             if (fromState.StateName == "invalid" || toState.StateName == "invalid")
-                cout << "Invalid state is detected in transition " << transitionName;
+                cout << "\nInvalid state is detected in transition " << transitionName;
 
             Transition transitionObj = Transition(transitionName, fromState, toState);
             //            if (!Transitions.Contains(transitionObj))
@@ -144,7 +144,7 @@ public:
                 Transitions.push_back(transitionObj);
             else
             {
-                cout << "Transitions from state " << fromStateName << " to state " << toStateName << " are defined more than once";
+                cout << "\nTransitions from state " << fromStateName << " to state " << toStateName << " are defined more than once";
             }
         }
 
@@ -156,7 +156,7 @@ public:
             split_to_list(stateAtomStructure, ":", parsedStateAtomStructure);
 
             if (parsedStateAtomStructure.size() == 0 || parsedStateAtomStructure.size() != 2)
-                cout << stateAtomStructure << " is not a valid state: atoms definition";
+                cout << "\n" << stateAtomStructure << " is not a valid state: atoms definition";
             //           string stateName = parsedStateAtomStructure[0].Replace(" ", string.Empty);
             string stateName;
             string parsedStateAtomStructure_0 = parsedStateAtomStructure.front();
@@ -183,12 +183,12 @@ public:
                 else if (!check_list_contain_string(stateAtoms, atom))
                     stateAtoms.push_back(atom);
                 else
-                    cout << "Atom " << atom << " is defined more than once for state " << stateName;
+                    cout << "\nAtom " << atom << " is defined more than once for state " << stateName;
             }
 
             State stateObj = FindStateByName(stateName);
             if (stateObj.StateName == "invalid")
-                cout << "State " << stateName << " is not defined";
+                cout << "\n" << "State " << stateName << " is not defined";
             stateObj.Atom = stateAtoms;
 
             //load to list of atoms
