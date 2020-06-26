@@ -416,20 +416,21 @@ private:
     // PreE
     list<State> PreE(list<State> y)
     {
-        //{s ∈ S | exists s, (s → s and s ∈ Y )}
-        list<State> states = new list<State>();
+        //{s âˆˆ S | exists s, (s â†’ s and s âˆˆ Y )}
+        list<State> states;// = new list<State>();
 
-        list<Transition> transitions = new list<Transition>();
-        foreach (State sourceState in _kripke.States)
+        list<Transition> transitions;// = new list<Transition>();
+        for (State sourceState : _kripke.States)
         {
-            foreach (State destState in y)
+            for (State destState : y)
             {
-                Transition myTransition = new Transition(sourceState, destState);
-                if (_kripke.Transitions.Contains(myTransition))
-                {
-                    if (!states.Contains(sourceState))
-                        states.Add(sourceState);
-                }
+                Transition myTransition;// = new Transition(sourceState, destState);
+                for( x : _kripke.Transitions)
+	                if ( x.find(myTransition) != string::npos)
+    	            {
+        	            if (!states.Contains(sourceState))
+            	            states.push_back(sourceState);
+                	}
             }
         }
 
