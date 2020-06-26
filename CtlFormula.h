@@ -45,19 +45,19 @@ public:
     //constrctor
     CtlFormula(string expression, State state, KripkeStructure kripke)
     {
-        this._convertionString = new Dictionary<string, string>();
-        this._convertionString.Add("and", "&");
-        this._convertionString.Add("or", "|");
-        this._convertionString.Add("->", ">");
-        this._convertionString.Add("not", "!");
+        _convertionString = new Dictionary<string, string>();
+        _convertionString.Add("and", "&");
+        _convertionString.Add("or", "|");
+        _convertionString.Add("->", ">");
+        _convertionString.Add("not", "!");
 
-        this._kripke = kripke;
-        this._state = state;
-        this._expression = ConvertToSystemFormula(expression);
+        _kripke = kripke;
+        _state = state;
+        _expression = ConvertToSystemFormula(expression);
     }
     string ConvertToSystemFormula(string expression)
     {
-        foreach (KeyValuePair<string, string> entry in this._convertionString)
+        foreach (KeyValuePair<string, string> entry in _convertionString)
         {
             expression = expression.Replace(entry.Key.ToString(), entry.Value.ToString());
         }
