@@ -45,7 +45,7 @@ public:
     map<string, string> _convertionString;
 
     //constrctor
-    CtlFormula(string expression, State state, KripkeStructure kripke)
+    CtlFormula(string expression, State state, KripkeStructure& kripke)
     {
         //         _convertionString = new Dictionary<string, string>();
         //         _convertionString.Add("and", "&");
