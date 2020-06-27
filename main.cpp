@@ -64,15 +64,8 @@ int main()
     cout << "CTL formula: " << input_ctl_formula << endl;
 
     //parse input kripke model to Objest KripkeStructure
-    KripkeStructure _kripke;
-    KripkeStructure kripke(input_kripke_model);
-    _kripke = kripke;
+    KripkeStructure _kripke(input_kripke_model);
     string kripke_model = _kripke.ToString();
-    //if need to show the each line of the input model
-    //    list<State>::iterator iter;
-    //    for(iter = _kripke.States.begin(); iter != _kripke.States.end(); iter++){
-    //        cout << *iter << endl;
-    //    }
 
     State checkedState = State(input_state);
     CtlFormula ctlFormula = CtlFormula(input_ctl_formula, checkedState, kripke_model);
