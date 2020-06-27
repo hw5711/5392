@@ -120,7 +120,7 @@ public:
             string transitionName = parsedTransition.front();
             parsedTransition.pop_front();
             list<string> parsedFromToStates;
-            string parsedTransition_1;
+            string parsedTransition_1 = parsedTransition.front();
             split_to_list(parsedTransition_1, "-", parsedFromToStates);
 
             if (parsedFromToStates.size() == 0 || parsedFromToStates.size() != 2)
@@ -140,7 +140,7 @@ public:
 
             Transition transitionObj = Transition(transitionName, fromState, toState);
             //            if (!Transitions.Contains(transitionObj))
-            if (check_list_contain_transition(Transitions, transitionObj))
+            if (!check_list_contain_transition(Transitions, transitionObj))
                 Transitions.push_back(transitionObj);
             else
             {
@@ -171,7 +171,9 @@ public:
 
             //            list<string> parsedAtoms = atomNames.Split(new char[]{' '}).ToList();
             list<string> parsedAtoms;
-            split_to_list(atomNames, " ", parsedAtoms);
+            // split_to_list(atomNames, " ", parsedAtoms);
+			for (char atom : atomNames)
+				parsedAtoms.push_back(string(1, atom));
 
             list<string> stateAtoms = list<string>();
             for (string atom : parsedAtoms)
@@ -378,11 +380,8 @@ public:
         list<State>::iterator iter_check_list;
         for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
         {
-            //if (iter_check_list->StateName == src.StateName && &iter_check_list->Atom == &src.Atom)
-            if (iter_check_list->StateName == src.StateName){
-                if(equal(iter_check_list->Atom.begin(), iter_check_list->Atom.end(), src.Atom.begin()))
-                    return true;
-            }
+            if (iter_check_list->StateName == src.StateName && &iter_check_list->Atom == &src.Atom)
+                return true;
         }
         return false;
     }

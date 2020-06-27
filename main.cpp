@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <direct.h>
 
 using namespace std;
 
@@ -33,7 +34,7 @@ int main()
     string kripke_content;
     _kripke_file.open(input_kripke_file_name);
 
-    if (_kripke_file.is_open())
+	if (_kripke_file.is_open())
     {
         while (!_kripke_file.eof())
         {
@@ -45,6 +46,7 @@ int main()
     else
     {
         cout << "File can't open ";
+		return 0;
     }
     _kripke_file.close();
 
@@ -64,11 +66,11 @@ int main()
     cout << "CTL formula: " << input_ctl_formula << endl;
 
     //parse input kripke model to Objest KripkeStructure
-    KripkeStructure _kripke(input_kripke_model);
+	KripkeStructure _kripke(input_kripke_model);
     string kripke_model = _kripke.ToString();
 
     State checkedState = State(input_state);
-    CtlFormula ctlFormula = CtlFormula(input_ctl_formula, checkedState, kripke_model);
+    CtlFormula ctlFormula = CtlFormula(input_ctl_formula, checkedState, _kripke);
     bool isSatisfy = ctlFormula.IsSatisfy();
     string message = GetMessage(isSatisfy, input_ctl_formula, input_state);
     cout << "Result is: " << message << endl;
