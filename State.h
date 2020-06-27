@@ -34,6 +34,11 @@ public:
     {
         return StateName == other.StateName;
     }
+
+	friend bool operator==(const State& lhs, const State& rhs)
+	{
+		return lhs.Equals(rhs);
+	}
 };
 
 #endif //SATPROJECT_STATE_H

@@ -90,6 +90,9 @@ private:
 
     //add function to check contain situation in a list for string
     bool check_list_contain_string(list<string>& dest, string src);
+
+	// remove all space in expression
+	void remove_all_space(string& expression);
 };
 
 #endif //SATPROJECT_CTLFORMULA_H

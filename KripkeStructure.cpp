@@ -65,15 +65,17 @@ KripkeStructure::KripkeStructure(string kripkeStructureDefinition) : KripkeStruc
         parsedFromToStates.pop_front();
         string toStateName = parsedFromToStates.front();
 
-		State fromState("invalid");
-		State toState("invalid");
-        FindStateByName(fromStateName, fromState);
-        FindStateByName(toStateName, toState);
+		list<State>::iterator iter_fromState, iter_toState;
+        iter_fromState = FindStateByName(fromStateName);
+		iter_toState = FindStateByName(toStateName);
 
-        if (fromState.StateName == "invalid" || toState.StateName == "invalid")
+        if (iter_fromState == States.end() || iter_toState == States.end())
             cout << "\nInvalid state is detected in transition " << transitionName;
+		
+// 		State fromState = *iter_fromState;
+// 		State toState = *iter_toState;
 
-        Transition transitionObj = Transition(transitionName, fromState, toState);
+        Transition transitionObj = Transition(transitionName, *iter_fromState, *iter_toState);
 
         if (!check_list_contain_transition(Transitions, transitionObj))
             Transitions.push_back(transitionObj);
@@ -119,11 +121,12 @@ KripkeStructure::KripkeStructure(string kripkeStructureDefinition) : KripkeStruc
                 cout << "\nAtom " << atom << " is defined more than once for state " << stateName;
         }
 
-		State stateObj("invalid");
-        FindStateByName(stateName, stateObj);
-        if (stateObj.StateName == "invalid")
-            cout << "\n" << "State " << stateName << " is not defined";
-        stateObj.Atom = stateAtoms;
+
+		list<State>::iterator iter_stateObj = FindStateByName(stateName);
+
+		if (iter_stateObj == States.end())
+			cout << "\n" << "State " << stateName << " is not defined";
+		iter_stateObj->Atom = stateAtoms;
 
         for (string atom : stateAtoms)
         {
@@ -133,14 +136,15 @@ KripkeStructure::KripkeStructure(string kripkeStructureDefinition) : KripkeStruc
     }
 }
 
-void KripkeStructure::FindStateByName(const string stateName, State& state)
+list<State>::iterator KripkeStructure::FindStateByName(const string stateName)
 {
     list<State>::iterator it;
     for (it = States.begin(); it != States.end(); it++)
     {
 		if (it->StateName == stateName)
-			state = *it;
+			return it;
     }
+	return States.end();
 }
 
 string KripkeStructure::ToString()
@@ -257,33 +261,15 @@ string KripkeStructure::trim(const string& s)
 
 bool KripkeStructure::check_list_contain_string(list<string>& dest, string src)
 {
-    list<string>::iterator iter_check_list;
-    for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
-    {
-        if (*iter_check_list == src)
-            return true;
-    }
-    return false;
+	return std::find(dest.begin(), dest.end(), src) != dest.end() ? true : false;
 }
 
 bool KripkeStructure::check_list_contain_transition(list<Transition>& dest, Transition src)
 {
-    list<Transition>::iterator iter_check_list;
-    for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
-    {
-        if (iter_check_list->Equals(src))
-            return true;
-    }
-    return false;
+	return std::find(dest.begin(), dest.end(), src) != dest.end() ? true : false;
 }
 
 bool KripkeStructure::check_list_contain_state(list<State>& dest, State src)
 {
-    list<State>::iterator iter_check_list;
-    for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
-    {
-        if (iter_check_list->StateName == src.StateName && &iter_check_list->Atom == &src.Atom)
-            return true;
-    }
-    return false;
+	return std::find(dest.begin(), dest.end(), src) != dest.end() ? true : false;
 }

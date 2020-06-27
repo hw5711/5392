@@ -16,6 +16,8 @@ CtlFormula::CtlFormula(string expression, State state, KripkeStructure& kripke)
     _kripke = kripke;
     _state = state;
     ConvertToSystemFormula(expression); //parse the input Ctl check formula
+	remove_all_space(expression);
+	_expression = expression;
 }
 
 void CtlFormula::ConvertToSystemFormula(string& expression)
@@ -606,48 +608,29 @@ string CtlFormula::RemoveExtraBrackets(string expression)
 
 bool CtlFormula::check_list_contain_state(list<State>& dest, State src)
 {
-    list<State>::iterator iter_check_list;
-    for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
-    {
-        if (iter_check_list->Equals(src))
-            return true;
-    }
-    return false;
+	return std::find(dest.begin(), dest.end(), src) != dest.end() ? true : false;
 }
 
 void CtlFormula::remove_from_list(list<State>& dest, State src)
 {
-    list<State>::iterator iter_dest;
-    bool flag = false;
-    for (iter_dest = dest.begin(); iter_dest != dest.end(); iter_dest++)
-    {
-        if (iter_dest->Equals(src))
-        {
-            flag = true;
-            break;
-        }
-    }
-    if (flag) dest.erase(iter_dest);
+	std::remove(dest.begin(), dest.end(), src);
 }
 
 bool CtlFormula::check_list_contain_transition(list<Transition>& dest, Transition src)
 {
-    list<Transition>::iterator iter_check_list;
-    for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
-    {
-        if (iter_check_list->Equals(src))
-            return true;
-    }
-    return false;
+	return std::find(dest.begin(), dest.end(), src) != dest.end() ? true : false;
 }
 
 bool CtlFormula::check_list_contain_string(list<string>& dest, string src)
 {
-    list<string>::iterator iter_check_list;
-    for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
-    {
-        if (*iter_check_list == src)
-            return true;
-    }
-    return false;
+	return std::find(dest.begin(), dest.end(), src) != dest.end() ? true : false;
+}
+
+void CtlFormula::remove_all_space(string& expression)
+{
+	if (expression.length() == 0) return;
+
+	size_t pos = 0;
+	while ((pos = expression.find(' ')) != string::npos)
+		expression.erase(pos, 1);
 }

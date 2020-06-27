@@ -30,7 +30,7 @@ public:
 
     KripkeStructure(string kripkeStructureDefinition);// : KripkeStructure();
 
-    void FindStateByName(const string stateName, State& state);
+    list<State>::iterator FindStateByName(const string stateName);
 
     string ToString();
     string StatesToString();

@@ -6,7 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <direct.h>
+
 
 using namespace std;
 
@@ -52,7 +52,9 @@ int main()
     //get CTL formular
     string input_ctl_formula;
     cout << "Enter CTL formula: " << endl;
-    cin >> input_ctl_formula;
+    // cin >> input_ctl_formula;
+	cin.ignore();
+	getline(cin, input_ctl_formula);
 
     //for testing part
     cout << "\nFile (Kripke model): " << input_kripke_model << endl;
@@ -89,3 +91,4 @@ int main()
 
     return 0;
 }
+

@@ -44,6 +44,10 @@ public:
         return false;
     }
 
+	friend bool operator==(const Transition& lhs, const Transition& rhs)
+	{
+		return lhs.Equals(rhs);
+	}
 };
 
 #endif //SATPROJECT_TRANSITION_H
