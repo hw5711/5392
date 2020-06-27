@@ -12,6 +12,7 @@
 #include <string>
 #include <list>
 #include <map>
+#include <algorithm>
 
 using namespace std;
 
@@ -73,12 +74,12 @@ public:
         // modify
         for (auto entry : _convertionString)
         {
-            size_t pos = expression.find(entry.first);
-            while (pos != string::npos)
-            {
-                expression.replace(pos, entry.first.length(), entry.second);
-                pos = expression.find(entry.first, pos + entry.first.length() + 1);
-            }
+			size_t pos = expression.find(entry.first);
+			while (pos != string::npos)
+			{
+				expression.replace(pos, entry.first.length(), entry.second);
+				pos = expression.find(entry.first, pos + entry.first.length() + 1);
+			}
         }
 
         return expression;
@@ -494,7 +495,7 @@ private:
 
             //            newY.AddRange(y.ToArray());
             list<State>::iterator iter_state_newY;
-            for (iter_state_newY = _kripke.States.begin(); iter_state_newY != _kripke.States.end(); iter_state_newY++)
+            for (iter_state_newY = y.begin(); iter_state_newY != y.end(); iter_state_newY++)
             {
                 newY.push_back(*iter_state_newY);
             }
@@ -611,7 +612,7 @@ private:
                 list<Transition>::iterator iter_x;
                 for (iter_x = _kripke.Transitions.begin(); iter_x != _kripke.Transitions.end(); iter_x++)
                 {
-                    if (check_list_contain_transition(_kripke.Transitions, myTransition))
+                    if (iter_x->Equals(myTransition))
                     {
                         if (!check_list_contain_state(states, *iter_sourceState))
                         {
@@ -688,7 +689,7 @@ private:
         list<State>::iterator iter_list1;
         for (iter_list1 = list1.begin(); iter_list1 != list1.end(); iter_list1++)
         {
-            if (check_list_contain_state(list2, *iter_list1))
+            if (!check_list_contain_state(list2, *iter_list1))
             {
                 return false;
             }
@@ -776,8 +777,8 @@ private:
         list<State>::iterator iter_check_list;
         for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
         {
-            if (iter_check_list->StateName == src.StateName && &iter_check_list->Atom == &src.Atom)
-                return true;
+			if (iter_check_list->Equals(src))
+				return true;
         }
         return false;
     }
