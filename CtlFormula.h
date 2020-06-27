@@ -609,17 +609,13 @@ private:
             for (iter_destState = y.begin(); iter_destState != y.end(); iter_destState++)
             {
                 Transition myTransition = Transition(*iter_sourceState, *iter_destState);
-                list<Transition>::iterator iter_x;
-                for (iter_x = _kripke.Transitions.begin(); iter_x != _kripke.Transitions.end(); iter_x++)
-                {
-                    if (iter_x->Equals(myTransition))
-                    {
-                        if (!check_list_contain_state(states, *iter_sourceState))
-                        {
-                            states.push_back(*iter_sourceState);
-                        }
-                    }
-                }
+				if (check_list_contain_transition(_kripke.Transitions, myTransition))
+				{
+					if (!check_list_contain_state(states, *iter_sourceState))
+					{
+						states.push_back(*iter_sourceState);
+					}
+				}
             }
         }
 
@@ -787,11 +783,16 @@ private:
     void remove_from_list(list<State> &dest, State src)
     {
         list<State>::iterator iter_dest;
+		bool flag = false;
         for (iter_dest = dest.begin(); iter_dest != dest.end(); iter_dest++)
         {
-            if (iter_dest->Equals(src))
-                iter_dest = dest.erase(iter_dest);
+			if (iter_dest->Equals(src))
+			{
+				flag = true;
+				break;
+			}
         }
+		if(flag) dest.erase(iter_dest);
     }
 
     //add function to check contain situation in a list for Transition
