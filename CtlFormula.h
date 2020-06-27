@@ -776,7 +776,7 @@ private:
         list<State>::iterator iter_check_list;
         for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
         {
-            if (iter_check_list->StateName == src.StateName && &iter_check_list->Atom == &src.Atom)
+            if (iter_check_list->StateName == src.StateName)// && &iter_check_list->Atom == &src.Atom)
                 return true;
         }
         return false;
