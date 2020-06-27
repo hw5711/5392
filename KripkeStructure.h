@@ -14,6 +14,8 @@
 
 using namespace std;
 
+static State invalid_state("Invalid");
+
 class KripkeStructure
 {
 public:
@@ -188,7 +190,7 @@ public:
                     cout << "\nAtom " << atom << " is defined more than once for state " << stateName;
             }
 
-            State stateObj = FindStateByName(stateName);
+            State& stateObj = FindStateByName(stateName);
             if (stateObj.StateName == "invalid")
                 cout << "\n" << "State " << stateName << " is not defined";
             stateObj.Atom = stateAtoms;
@@ -202,7 +204,7 @@ public:
         }
     }
 
-    State FindStateByName(string stateName)
+    State& FindStateByName(string stateName)
     {
         //        for (State state : States)
         //        {
@@ -217,8 +219,7 @@ public:
                 return *it;
         }
 
-        //        return null;
-        return State("invalid"); // need to test
+		return invalid_state;
     }
 
     string ToString()
