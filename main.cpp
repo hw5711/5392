@@ -13,13 +13,7 @@ using namespace std;
 //Need to update
 string GetMessage(bool isSatisfy, string expression, string stateID)
 {
-    string message = "xx";
-    /*** need to check ***/
-    //              string.Format("Property {0} {1} in state {2}"
-    //            , expression
-    //            , isSatisfy ? "holds" : "does not hold"
-    //            , stateID);
-
+    string message;
 	message = "Property " + expression + " " + (isSatisfy ? "holds " : "does not hold ") + "in state " + stateID;
     return message;
 }
@@ -41,7 +35,6 @@ int main()
         {
             _kripke_file >> kripke_content;
             input_kripke_model += kripke_content;
-            //cout << kripke_content;
         }
     }
     else

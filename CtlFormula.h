@@ -212,7 +212,6 @@ private:
     // Determine states that satisfy given expression
     list<State> SAT(string expression)
     {
-        //        System.Diagnostics.Debug.WriteLine(string.Format("Original Expression: {0}", expression));
         cout << "Original Expression: " << expression;
         list<State> states = list<State>();
 
@@ -222,10 +221,6 @@ private:
         //TypeSAT typeSAT = DetermineTypeSAT(expression, ref leftExpression, ref rightExpression);
         TypeSAT typeSAT = GetTypeSAT(expression, leftExpression, rightExpression);
 
-        //        System.Diagnostics.Debug.WriteLine(string.Format("Type SAT: {0}", ToString()));
-        //        System.Diagnostics.Debug.WriteLine(string.Format("Left Expression: {0}", leftExpression));
-        //        System.Diagnostics.Debug.WriteLine(string.Format("Right Expression: {0}", rightExpression));
-        //        System.Diagnostics.Debug.WriteLine("------------------------------------");
         cout << "Type SAT: " << _kripke.ToString() << endl;
         cout << "Left Expression: " << leftExpression << endl;
         cout << "Right Expression: " << rightExpression << endl;
@@ -235,7 +230,6 @@ private:
         case AllTrue:
         {
             //all states
-            //                states.AddRange(_kripke.States.ToArray());
             list<State>::iterator iter_state_all_true;
             for (iter_state_all_true = _kripke.States.begin();
                  iter_state_all_true != _kripke.States.end(); iter_state_all_true++)
@@ -251,11 +245,6 @@ private:
         }
         case Atomic:
         {
-            //                foreach (State state in _kripke.States)
-            //                {
-            //                    if (state.Atoms.Contains(leftExpression))
-            //                        states.Add(state);
-            //                }
             list<State>::iterator iter_atomic;
             for (iter_atomic = _kripke.States.begin(); iter_atomic != _kripke.States.end(); iter_atomic++)
             {
@@ -269,7 +258,6 @@ private:
         case Not:
         {
             //S − SAT (φ1)
-            //                states.AddRange(_kripke.States.ToArray());
             list<State>::iterator iter_state_not;
             for (iter_state_not = _kripke.States.begin(); iter_state_not != _kripke.States.end(); iter_state_not++)
             {
@@ -277,11 +265,6 @@ private:
             }
             list<State> f1States = SAT(leftExpression);
 
-            //                foreach (State state in f1States)
-            //                {
-            //                    if (states.Contains(state))
-            //                        states.Remove(state);
-            //                }
             list<State>::iterator iter_f1States;
             for (iter_f1States = f1States.begin(); iter_f1States != f1States.end(); iter_f1States++)
             {
@@ -298,11 +281,6 @@ private:
             list<State> andF1States = SAT(leftExpression);
             list<State> andF2States = SAT(rightExpression);
 
-            //                foreach (State state in andF1States)
-            //                {
-            //                    if (andF2States.Contains(state))
-            //                        states.Add(state);
-            //                }
             list<State>::iterator iter_and;
             for (iter_and = andF1States.begin(); iter_and != andF1States.end(); iter_and++)
             {
@@ -320,11 +298,6 @@ private:
             list<State> orF2States = SAT(rightExpression);
 
             states = orF1States;
-            //                foreach (State state in orF2States)
-            //                {
-            //                    if (!states.Contains(state))
-            //                        states.Add(state);
-            //                }
             list<State>::iterator iter_or;
             for (iter_or = orF2States.begin(); iter_or != orF2States.end(); iter_or++)
             {
@@ -339,7 +312,6 @@ private:
         {
             //SAT (¬φ1 ∨ φ2)
             //TODO: reevaluate impliesFormula
-            //                string impliesFormula = string.Concat("!", leftExpression, "|", rightExpression);
             string impliesFormula = "!" + leftExpression + "|" + rightExpression;
             states = SAT(impliesFormula);
             break;
@@ -348,23 +320,11 @@ private:
         {
             //SAT (¬EX¬φ1)
             //TODO: reevaluate axFormula
-            //                string axFormula = string.Concat("!", "EX", "!", leftExpression);
             string axFormula = "!EX!" + leftExpression;
             states = SAT(axFormula);
 
             //check if states actually has link to next state
             list<State> tempStates = list<State>();
-            //                foreach (State sourceState in states)
-            //                {
-            //                    foreach (Transition transition in _kripke.Transitions)
-            //                    {
-            //                        if (sourceState.Equals(transition.FromState))
-            //                        {
-            //                            tempStates.Add(sourceState);
-            //                            break;
-            //                        }
-            //                    }
-            //                }
             list<State>::iterator iter_sourceState;
             for (iter_sourceState = states.begin(); iter_sourceState != states.end(); iter_sourceState++)
             {
@@ -395,7 +355,6 @@ private:
             //A[φ1 U φ2]
             //SAT(¬(E[¬φ2 U (¬φ1 ∧¬φ2)] ∨ EG¬φ2))
             //TODO: reevaluate auFormulaBuilder
-            //                StringBuilder auFormulaBuilder = new StringBuilder();
             string auFormulaBuilder;
             auFormulaBuilder.append("!(E(!");
             auFormulaBuilder.append(rightExpression);
@@ -420,7 +379,6 @@ private:
         {
             //SAT (E( U φ1))
             //TODO: reevaluate efFormula
-            //                string efFormula = string.Concat("E(TU", leftExpression, ")");
             string efFormula = "E(TU" + leftExpression + ")";
             states = SAT(efFormula);
             break;
@@ -429,7 +387,6 @@ private:
         {
             //SAT(¬AF¬φ1)
             //TODO: reevaulate egFormula
-            //                string egFormula = string.Concat("!AF!", leftExpression);
             string egFormula = "!AF!" + leftExpression;
             states = SAT(egFormula);
             break;
@@ -446,7 +403,6 @@ private:
         {
             //SAT (¬EF¬φ1)
             //TODO: reevaluate agFormula
-            //                string agFormula = string.Concat("!EF!", leftExpression);
             string agFormula = "!EF!" + leftExpression;
             states = SAT(agFormula);
             break;
@@ -479,7 +435,6 @@ private:
         list<State> y = list<State>();
 
         w = SAT(leftExpression);
-        //        x.AddRange(_kripke.States.ToArray());
         list<State>::iterator iter_state_x;
         for (iter_state_x = _kripke.States.begin(); iter_state_x != _kripke.States.end(); iter_state_x++)
         {
@@ -493,7 +448,6 @@ private:
             list<State> newY = list<State>();
             list<State> preEStates = PreE(y);
 
-            //            newY.AddRange(y.ToArray());
             list<State>::iterator iter_state_newY;
             for (iter_state_newY = y.begin(); iter_state_newY != y.end(); iter_state_newY++)
             {
@@ -501,11 +455,6 @@ private:
             }
 
             list<State> wAndPreE = list<State>();
-            //            foreach (State state in w)
-            //            {
-            //                if (preEStates.Contains(state))
-            //                    wAndPreE.Add(state);
-            //            }
             list<State>::iterator iter_state_w;
             for (iter_state_w = w.begin(); iter_state_w != w.end(); iter_state_w++)
             {
@@ -515,11 +464,6 @@ private:
                 }
             }
 
-            //            foreach (State state in wAndPreE)
-            //            {
-            //                if (!newY.Contains(state))
-            //                    newY.Add(state);
-            //            }
             list<State>::iterator iter_wAndPreE;
             for (iter_wAndPreE = wAndPreE.begin(); iter_wAndPreE != wAndPreE.end(); iter_wAndPreE++)
             {
@@ -538,7 +482,6 @@ private:
     list<State> SAT_AF(string expression)
     {
         list<State> x = list<State>();
-        //        x.AddRange(_kripke.States.ToArray());
         list<State>::iterator iter_state_x;
         for (iter_state_x = _kripke.States.begin(); iter_state_x != _kripke.States.end(); iter_state_x++)
         {
@@ -552,18 +495,12 @@ private:
             x = y;
             list<State> newY = list<State>();
             list<State> preAStates = PreA(y);
-            //            newY.AddRange(y.ToArray());
             list<State>::iterator iter_state_newY;
             for (iter_state_newY = y.begin(); iter_state_newY != y.end(); iter_state_newY++)
             {
                 newY.push_back(*iter_state_newY);
             }
 
-            //            foreach (State state in preAStates)
-            //            {
-            //                if (!newY.Contains(state))
-            //                    newY.Add(state);
-            //            }
             list<State>::iterator iter_preAStates;
             for (iter_preAStates = preAStates.begin(); iter_preAStates != preAStates.end(); iter_preAStates++)
             {
@@ -585,22 +522,6 @@ private:
         list<State> states; // = new list<State>();
 
         list<Transition> transitions = list<Transition>();
-
-        //        for (State sourceState : _kripke.States)
-        //        {
-        //            for (State destState : y)
-        //            {
-        ////                Transition myTransition;// = new Transition(sourceState, destState);
-        //                Transition myTransition =  Transition(sourceState, destState);
-        //                for( x : _kripke.Transitions)
-        //                    if ( x.find(myTransition) != string::npos)
-        //                    {
-        ////                        if (!states.Contains(sourceState))
-        //                        if(!check_list_contain_state(states, sourceState))
-        //                            states.push_back(sourceState);
-        //                    }
-        //            }
-        //        }
 
         list<State>::iterator iter_sourceState;
         for (iter_sourceState = _kripke.States.begin(); iter_sourceState != _kripke.States.end(); iter_sourceState++)
@@ -629,18 +550,11 @@ private:
         list<State> PreEY = PreE(y);
 
         list<State> S_Minus_Y = list<State>();
-        //        S_Minus_Y.AddRange(_kripke.States.ToArray());
         list<State>::iterator iter_state_S_Minus_Y;
         for (iter_state_S_Minus_Y = _kripke.States.begin(); iter_state_S_Minus_Y != _kripke.States.end(); iter_state_S_Minus_Y++)
         {
             S_Minus_Y.push_back(*iter_state_S_Minus_Y);
         }
-
-        //        foreach (State state in y)
-        //        {
-        //            if (S_Minus_Y.Contains(state))
-        //                S_Minus_Y.Remove(state);
-        //        }
 
         list<State>::iterator iter_y;
         for (iter_y = y.begin(); iter_y != y.end(); iter_y++)
@@ -654,11 +568,6 @@ private:
         list<State> PreE_S_Minus_Y = PreE(S_Minus_Y);
 
         //PreEY - PreE(S-Y)
-        //        foreach (State state in PreE_S_Minus_Y)
-        //        {
-        //            if (PreEY.Contains(state))
-        //                PreEY.Remove(state);
-        //        }
         list<State>::iterator iter_PreE_S_Minus_Y;
         for (iter_PreE_S_Minus_Y = PreE_S_Minus_Y.begin(); iter_PreE_S_Minus_Y != PreE_S_Minus_Y.end(); iter_PreE_S_Minus_Y++)
         {
@@ -677,11 +586,6 @@ private:
         if (list1.size() != list2.size())
             return false;
 
-        //        for (State state : list1)
-        //        {
-        //            if ( list2.find(state) == string::npos)
-        //                return false;
-        //        }
         list<State>::iterator iter_list1;
         for (iter_list1 = list1.begin(); iter_list1 != list1.end(); iter_list1++)
         {
@@ -697,11 +601,6 @@ private:
     // Determine whether this is an atom
     bool IsAtomic(string expression)
     {
-        //        for ( string x: _kripke.Atoms)
-        //        {
-        //            if ( x.find(expression) != string::npos)
-        //                return true;
-        //        }
         if (check_list_contain_string(_kripke.Atoms, expression))
             return true;
         return false;
