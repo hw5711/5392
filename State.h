@@ -30,7 +30,7 @@ public:
         StateName = stateName;
     }
 
-    bool Equals(State other)
+    bool Equals(const State other) const
     {
         return StateName == other.StateName;
     }

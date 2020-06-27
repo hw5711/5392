@@ -36,7 +36,7 @@ public:
         ToState = toState;
     }
 
-    bool Equals(Transition other)
+    bool Equals(const Transition& other) const
     {
         if (FromState.Equals(other.FromState) && ToState.Equals(other.ToState))
             return true;

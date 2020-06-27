@@ -15,10 +15,10 @@ CtlFormula::CtlFormula(string expression, State state, KripkeStructure& kripke)
 
     _kripke = kripke;
     _state = state;
-    _expression = ConvertToSystemFormula(expression); //parse the input Ctl check formula
+    ConvertToSystemFormula(expression); //parse the input Ctl check formula
 }
 
-string CtlFormula::ConvertToSystemFormula(string expression)
+void CtlFormula::ConvertToSystemFormula(string& expression)
 {
 
     // modify
@@ -31,8 +31,6 @@ string CtlFormula::ConvertToSystemFormula(string expression)
             pos = expression.find(entry.first, pos + entry.first.length() + 1);
         }
     }
-
-    return expression;
 }
 
 bool CtlFormula::IsSatisfy()
@@ -461,7 +459,7 @@ list<State> CtlFormula::SAT_AF(string expression)
     return y;
 }
 
-list<State> CtlFormula::PreE(list<State> y)
+list<State> CtlFormula::PreE(list<State>& y)
 {
     //{s âˆˆ S | exists s, (s â†’ s and s âˆˆ Y )}
     list<State> states; // = new list<State>();
@@ -488,7 +486,7 @@ list<State> CtlFormula::PreE(list<State> y)
     return states;
 }
 
-list<State> CtlFormula::PreA(list<State> y)
+list<State> CtlFormula::PreA(list<State>& y)
 {
     //pre∀(Y ) = pre∃y − pre∃(S − Y)
     list<State> PreEY = PreE(y);
@@ -524,7 +522,7 @@ list<State> CtlFormula::PreA(list<State> y)
     return PreEY;
 }
 
-bool CtlFormula::ArelistStatesEqual(list<State> list1, list<State> list2)
+bool CtlFormula::ArelistStatesEqual(list<State>& list1, list<State>& list2)
 {
     if (list1.size() != list2.size())
         return false;
@@ -537,14 +535,7 @@ bool CtlFormula::ArelistStatesEqual(list<State> list1, list<State> list2)
             return false;
         }
     }
-    list<State>::iterator iter_list2;
-    for (iter_list2 = list2.begin(); iter_list2 != list2.end(); iter_list2++)
-    {
-        if (!check_list_contain_state(list1, *iter_list2))
-        {
-            return false;
-        }
-    }
+
     return true;
 }
 

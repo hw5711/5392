@@ -47,7 +47,7 @@ public:
 
     //constrctor
     CtlFormula(string expression, State state, KripkeStructure& kripke);
-    string ConvertToSystemFormula(string expression);
+    void ConvertToSystemFormula(string& expression);
     bool IsSatisfy();
 
 private:
@@ -62,13 +62,13 @@ private:
     // Handling AF
     list<State> SAT_AF(string expression);
     // PreE
-    list<State> PreE(list<State> y);
+    list<State> PreE(list<State>& y);
 
     // PreA
-    list<State> PreA(list<State> y);
+    list<State> PreA(list<State>& y);
 
     // Determine whether the list contain same set of states
-    bool ArelistStatesEqual(list<State> list1, list<State> list2);
+    bool ArelistStatesEqual(list<State>& list1, list<State>& list2);
 
     // Determine whether this is an atom
     bool IsAtomic(string expression);

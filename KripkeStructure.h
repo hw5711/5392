@@ -14,8 +14,6 @@
 
 using namespace std;
 
-static State invalid_state("Invalid");
-
 class KripkeStructure
 {
 public:
@@ -32,7 +30,7 @@ public:
 
     KripkeStructure(string kripkeStructureDefinition);// : KripkeStructure();
 
-    State& FindStateByName(string stateName);
+    void FindStateByName(const string stateName, State& state);
 
     string ToString();
     string StatesToString();

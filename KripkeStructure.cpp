@@ -65,8 +65,10 @@ KripkeStructure::KripkeStructure(string kripkeStructureDefinition) : KripkeStruc
         parsedFromToStates.pop_front();
         string toStateName = parsedFromToStates.front();
 
-        State fromState = FindStateByName(fromStateName);
-        State toState = FindStateByName(toStateName);
+		State fromState("invalid");
+		State toState("invalid");
+        FindStateByName(fromStateName, fromState);
+        FindStateByName(toStateName, toState);
 
         if (fromState.StateName == "invalid" || toState.StateName == "invalid")
             cout << "\nInvalid state is detected in transition " << transitionName;
@@ -117,7 +119,8 @@ KripkeStructure::KripkeStructure(string kripkeStructureDefinition) : KripkeStruc
                 cout << "\nAtom " << atom << " is defined more than once for state " << stateName;
         }
 
-        State& stateObj = FindStateByName(stateName);
+		State stateObj("invalid");
+        FindStateByName(stateName, stateObj);
         if (stateObj.StateName == "invalid")
             cout << "\n" << "State " << stateName << " is not defined";
         stateObj.Atom = stateAtoms;
@@ -130,16 +133,14 @@ KripkeStructure::KripkeStructure(string kripkeStructureDefinition) : KripkeStruc
     }
 }
 
-State& KripkeStructure::FindStateByName(string stateName)
+void KripkeStructure::FindStateByName(const string stateName, State& state)
 {
     list<State>::iterator it;
     for (it = States.begin(); it != States.end(); it++)
     {
-        if (it->StateName == stateName)
-            return *it;
+		if (it->StateName == stateName)
+			state = *it;
     }
-
-    return invalid_state;
 }
 
 string KripkeStructure::ToString()
