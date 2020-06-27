@@ -537,7 +537,14 @@ bool CtlFormula::ArelistStatesEqual(list<State> list1, list<State> list2)
             return false;
         }
     }
-
+    list<State>::iterator iter_list2;
+    for (iter_list2 = list2.begin(); iter_list2 != list2.end(); iter_list2++)
+    {
+        if (!check_list_contain_state(list1, *iter_list2))
+        {
+            return false;
+        }
+    }
     return true;
 }
 
