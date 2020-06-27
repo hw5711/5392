@@ -36,7 +36,6 @@ enum TypeSAT
     AG
 };
 
-
 class CtlFormula
 {
 public:
