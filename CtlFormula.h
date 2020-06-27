@@ -48,11 +48,6 @@ public:
     //constrctor
     CtlFormula(string expression, State state, KripkeStructure& kripke)
     {
-        //         _convertionString = new Dictionary<string, string>();
-        //         _convertionString.Add("and", "&");
-        //         _convertionString.Add("or", "|");
-        //         _convertionString.Add("->", ">");
-        //         _convertionString.Add("not", "!");
 
         // modify: consert dictionary to map
         _convertionString["and"] = "&";
@@ -66,10 +61,6 @@ public:
     }
     string ConvertToSystemFormula(string expression)
     {
-        //         foreach (KeyValuePair<string, string> entry in _convertionString)
-        //         {
-        //             expression = expression.Replace(entry.Key.ToString(), entry.Value.ToString());
-        //         }
 
         // modify
         for (auto entry : _convertionString)
