@@ -378,8 +378,11 @@ public:
         list<State>::iterator iter_check_list;
         for (iter_check_list = dest.begin(); iter_check_list != dest.end(); iter_check_list++)
         {
-            if (iter_check_list->StateName == src.StateName && &iter_check_list->Atom == &src.Atom)
-                return true;
+            //if (iter_check_list->StateName == src.StateName && &iter_check_list->Atom == &src.Atom)
+            if (iter_check_list->StateName == src.StateName){
+                if(equal(iter_check_list->Atom.begin(), iter_check_list->Atom.end(), src.Atom.begin()))
+                    return true;
+            }
         }
         return false;
     }
