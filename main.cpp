@@ -71,6 +71,7 @@ int main()
 
     State checkedState = State(input_state);
     CtlFormula ctlFormula = CtlFormula(input_ctl_formula, checkedState, _kripke);
+	
     bool isSatisfy = ctlFormula.IsSatisfy();
     string message = GetMessage(isSatisfy, input_ctl_formula, input_state);
     cout << "Result is: " << message << endl;
