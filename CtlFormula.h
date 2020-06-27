@@ -554,7 +554,7 @@ private:
             list<State> preAStates = PreA(y);
             //            newY.AddRange(y.ToArray());
             list<State>::iterator iter_state_newY;
-            for (iter_state_newY = _kripke.States.begin(); iter_state_newY != _kripke.States.end(); iter_state_newY++)
+            for (iter_state_newY = y.begin(); iter_state_newY != y.end(); iter_state_newY++)
             {
                 newY.push_back(*iter_state_newY);
             }
