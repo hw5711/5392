@@ -68,6 +68,24 @@ int main()
 
     //parse input kripke model to Objest KripkeStructure
 	KripkeStructure _kripke(input_kripke_model);
+
+	// if the given state is not in structure
+	bool isExist = false;
+	list<State>::iterator iter_state;
+	for (iter_state = _kripke.States.begin(); iter_state != _kripke.States.end(); iter_state++)
+	{
+		if (iter_state->Equals(input_state))
+		{
+			isExist = true;
+			break;
+		}
+	}
+	if (!isExist)
+	{
+		std::cout << "the given state is not in structure ! " << std::endl;
+		return 0;
+	}
+
     string kripke_model = _kripke.ToString();
 
     State checkedState = State(input_state);
