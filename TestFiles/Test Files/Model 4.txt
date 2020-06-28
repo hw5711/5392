@@ -1,4 +1,4 @@
-﻿s1, s2, s3, s4, s5, s6, s7, s8, s9;
+s1, s2, s3, s4, s5, s6, s7, s8, s9;
 t1 : s1 - s2,
 t2 : s2 - s3,
 t3 : s3 - s4,
@@ -11,12 +11,12 @@ t9 : s6 - s7,
 t10 : s7 - s8,
 t11 : s9 - s8,
 t12 : s6 - s9;             
-s1 : n1 n2 0,
-s2 : t1 n2 1,
-s3 : c1 n2 1,
-s4 : c1 t2 1,
-s5 : t1 t2 1,
-s6 : n1 t2 2,
-s7 : t1 t2 2,
-s8 : t1 c2 2,
-s9 : n1 c2 2;
+s1 : n m 0,
+s2 : t m a,
+s3 : c m a,
+s4 : c e a,
+s5 : t e a,
+s6 : n e b,
+s7 : t e b,
+s8 : t d b,
+s9 : n d b;
