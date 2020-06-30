@@ -25,15 +25,15 @@ enum TypeSAT
     Not,
     And,
     Or,
-    Implies,
-    AX,
-    EX,
-    AU,
-    EU,
-    EF,
-    EG,
-    AF,
-    AG
+    Implies,    //SAT (¬φ1 ∨ φ2)
+    AX,         //SAT (¬EX¬φ1)
+    EX,         //SAT_EX
+    AU,         //A[φ1 U φ2] = SAT(¬(E[¬φ2 U (¬φ1 ∧¬φ2)] ∨ EG¬φ2))
+    EU,         //SAT_EU
+    EF,         //SAT (E( U φ1))
+    EG,         //SAT(¬AF¬φ1)
+    AF,         //SAT_AF
+    AG          //SAT (¬EF¬φ1)
 };
 
 class CtlFormula
