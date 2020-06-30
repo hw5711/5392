@@ -11,8 +11,11 @@ KripkeStructure::KripkeStructure(string kripkeStructureDefinition) : KripkeStruc
     replace_by_empty(kripkeStructureDefinition, "\r\n");
     split_to_list(kripkeStructureDefinition, ";", parsedStructure);
 
-    if (parsedStructure.size() == 0 || parsedStructure.size() != 4)
-        cout << "\nInput file does not contain appropriate segments to construct kripke structure." << endl;
+	if (parsedStructure.size() == 0 || parsedStructure.size() != 4)
+	{
+		cout << "\nInput file does not contain appropriate segments to construct kripke structure." << endl;
+		exit(0);
+	}
 
     list<string> stateNames;
     string src_0 = parsedStructure.front();
@@ -38,8 +41,11 @@ KripkeStructure::KripkeStructure(string kripkeStructureDefinition) : KripkeStruc
         {
             States.push_back(State(*iter_state_names));
         }
-        else
-            cout << "\nState " << *iter_state_names << "is defined more than once.";
+		else
+		{
+			cout << "\nState " << *iter_state_names << "is defined more than once.";
+			exit(0);
+		}
     }
 
     //load transitions
@@ -49,8 +55,11 @@ KripkeStructure::KripkeStructure(string kripkeStructureDefinition) : KripkeStruc
         list<string> parsedTransition;
         split_to_list(transition, ":", parsedTransition);
 
-        if (parsedTransition.size() == 0 || parsedTransition.size() != 2)
-            cout << "\nTransition is not in the valid format";
+		if (parsedTransition.size() == 0 || parsedTransition.size() != 2)
+		{
+			cout << "\nTransition is not in the valid format";
+			exit(0);
+		}
 
         string transitionName = parsedTransition.front();
         parsedTransition.pop_front();
@@ -58,8 +67,12 @@ KripkeStructure::KripkeStructure(string kripkeStructureDefinition) : KripkeStruc
         string parsedTransition_1 = parsedTransition.front();
         split_to_list(parsedTransition_1, "-", parsedFromToStates);
 
-        if (parsedFromToStates.size() == 0 || parsedFromToStates.size() != 2)
-            cout << "\nTransition " << transitionName << " is not in[from state] - [to state] format ";
+		if (parsedFromToStates.size() == 0 || parsedFromToStates.size() != 2)
+		{
+			cout << "\nTransition " << transitionName << " is not in[from state] - [to state] format ";
+			exit(0);
+		}
+			
 
         string fromStateName = parsedFromToStates.front();
         parsedFromToStates.pop_front();
@@ -69,8 +82,12 @@ KripkeStructure::KripkeStructure(string kripkeStructureDefinition) : KripkeStruc
         iter_fromState = FindStateByName(fromStateName);
 		iter_toState = FindStateByName(toStateName);
 
-        if (iter_fromState == States.end() || iter_toState == States.end())
-            cout << "\nInvalid state is detected in transition " << transitionName;
+		if (iter_fromState == States.end() || iter_toState == States.end())
+		{
+			cout << "\nInvalid state is detected in transition " << transitionName;
+			exit(0);
+		}
+			
 		
 // 		State fromState = *iter_fromState;
 // 		State toState = *iter_toState;
@@ -82,6 +99,7 @@ KripkeStructure::KripkeStructure(string kripkeStructureDefinition) : KripkeStruc
         else
         {
             cout << "\nTransitions from state " << fromStateName << " to state " << toStateName << " are defined more than once";
+			exit(0);
         }
     }
 
@@ -91,8 +109,12 @@ KripkeStructure::KripkeStructure(string kripkeStructureDefinition) : KripkeStruc
         list<string> parsedStateAtomStructure;
         split_to_list(stateAtomStructure, ":", parsedStateAtomStructure);
 
-        if (parsedStateAtomStructure.size() == 0 || parsedStateAtomStructure.size() != 2)
-            cout << "\n" << stateAtomStructure << " is not a valid state: atoms definition";
+		if (parsedStateAtomStructure.size() == 0 || parsedStateAtomStructure.size() != 2)
+		{
+			cout << "\n" << stateAtomStructure << " is not a valid state: atoms definition";
+			exit(0);
+		}
+            
 
         string stateName;
         string parsedStateAtomStructure_0 = parsedStateAtomStructure.front();
@@ -117,15 +139,22 @@ KripkeStructure::KripkeStructure(string kripkeStructureDefinition) : KripkeStruc
             }
             else if (!check_list_contain_string(stateAtoms, atom))
                 stateAtoms.push_back(atom);
-            else
-                cout << "\nAtom " << atom << " is defined more than once for state " << stateName;
+			else
+			{
+				cout << "\nAtom " << atom << " is defined more than once for state " << stateName;
+				exit(0);
+			}
+				
         }
 
 
 		list<State>::iterator iter_stateObj = FindStateByName(stateName);
 
 		if (iter_stateObj == States.end())
+		{
 			cout << "\n" << "State " << stateName << " is not defined";
+			exit(0);
+		}	
 		iter_stateObj->Atom = stateAtoms;
 
         for (string atom : stateAtoms)

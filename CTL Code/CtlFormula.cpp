@@ -340,6 +340,7 @@ list<State> CtlFormula::SAT(string expression)
         states = SAT(egFormula);
         break;
     }
+
     case AF:
     {
         //SATAF (φ1)
@@ -358,6 +359,7 @@ list<State> CtlFormula::SAT(string expression)
     }
     case UnKnown:
         cout << "Invalid CTL expression";
+		exit(0);
     }
 
     return states;
