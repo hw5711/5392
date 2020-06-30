@@ -7,7 +7,6 @@
 #include <fstream>
 #include <string>
 
-
 using namespace std;
 
 //Need to update
@@ -20,7 +19,6 @@ string GetMessage(bool isSatisfy, string expression, string stateID)
 
 int main()
 {
-
     //get model file
     cout << "Enter file name (kripke model): " << endl;
     ifstream _kripke_file;
@@ -65,17 +63,7 @@ int main()
 	KripkeStructure _kripke(input_kripke_model);
 
 	// if the given state is not in structure
-	bool isExist = false;
-	list<State>::iterator iter_state;
-	for (iter_state = _kripke.States.begin(); iter_state != _kripke.States.end(); iter_state++)
-	{
-		if (iter_state->Equals(input_state))
-		{
-			isExist = true;
-			break;
-		}
-	}
-	if (!isExist)
+	if (std::find(_kripke.States.begin(), _kripke.States.end(), input_state) == _kripke.States.end())
 	{
 		std::cout << "the given state is not in structure ! " << std::endl;
 		return 0;
